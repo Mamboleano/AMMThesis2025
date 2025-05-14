@@ -1,0 +1,710 @@
+\usepackage{microtype}      % better looking text
+%\usepackage[utf8]{inputenc}
+% \usepackage{fontspec}       % Package for custom fonts
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{charter}
+\usepackage[]{geometry}     % Package for changing page margins (before fancyhdr) 
+\usepackage{fancyhdr}       % Package to change header and footer
+\usepackage{parskip}        % Package to tweak paragraph skipping (instead of indents a small skip is added after every paragraph)
+\usepackage{titlesec}
+\usepackage{tikz}           % Package for drawing
+\usepackage{pgfplots}       % Package for creating graphs and charts
+\usepackage{xcolor}         % Package for defining DTU colours to be used
+\usepackage{amsmath}        % For aligning equations among other
+\usepackage{siunitx}        % SI units
+\usepackage{listings}       % Package for inserting code, (before cleveref)
+\PassOptionsToPackage{hyphens}{url} % Ability to line break urls at hyphens
+\usepackage{hyperref}       % Package for cross referencing (also loads url package)
+\usepackage{cleveref}       % improved cross referencing
+\usepackage{textcomp}       % \textdegree = °C and other useful symbols
+\usepackage[english]{babel} % localisation 
+\usepackage{caption}        % better captions
+\usepackage{subcaption}     % for subfigures
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}       % For biblatex with babel
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex} % Package for bibliography (citing)
+\bibliography{bibliography.bib}
+\usepackage{tabularx}       % for ability to adjust column spacing in tabular better
+\usepackage{booktabs}       % for better tables
+\usepackage{float}          % floating figures in correct places
+\usepackage{calc}           % Adds ability for latex to calculate (3pt+2pt) 
+\usepackage{blindtext}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% End of template preamble %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{color}
+\usepackage{xspace} % Smart spaces after commands
+\usepackage{bm} % for bold symbols
+%\usepackage{mathbbol} % for bb-style greek letters
+\usepackage{amssymb}
+\usepackage{amsthm}
+% \usepackage{stmaryrd} % for llbracket and rrbracket\textbf{\textbf{}}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{url}
+\usepackage{etoolbox}
+\usepackage[inline,shortlabels]{enumitem} 
+\newlist{inlinelist}{enumerate*}{1}
+\setlist*[inlinelist,1]{%
+  label=(\roman*),
+}
+\usepackage{xifthen}  % Extended conditional commands
+\usepackage{ifthen}
+\usepackage{nicefrac}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\hypersetup{
+  breaklinks   = true,
+  colorlinks   = true, %Colours links instead of ugly boxes
+  urlcolor     = blue, %Colour for external hyperlinks
+  linkcolor    = blue, %Colour of internal links
+  citecolor    = red   %Colour of citations
+}
+\hypersetup{final} % Needed to generate hyperlinks even in draft mode (ERROR IN MAC)
+% draft -> final to remove notes
+\usepackage[draft,nomargin,inline,index]{fixme} % Simplified management of FIXME's
+
+\fxusetheme{color}
+
+\definecolor{BlueViolet}{rgb}{0, 0, 0.55}
+\definecolor{RubineRed}{rgb}{0.88, 0.07, 0.37}
+\definecolor{ForestGreen}{rgb}{0.13, 0.55, 0.13}
+\definecolor{Blue}{rgb}{0.0, 0.0, 1.0}
+\definecolor{NavyBlue}{rgb}{0.0, 0.0, 0.5}
+\definecolor{Black}{rgb}{0.02, 0.02, 0.02}
+\definecolor{MidnightBlue}{rgb}{0.0, 0.2, 0.4}
+\definecolor{Gray}{rgb}{0.41, 0.41, 0.41}
+\definecolor{TealBlue}{rgb}{0.212,0.459,0.533}
+\definecolor{Plum}{rgb}{0.6,0.25,0.6}
+
+\definecolor{Black}{HTML}{000000}
+\definecolor{Gray}{HTML}{808080}
+\definecolor{Magenta}{HTML}{FF00FF}
+\definecolor{RubineRed}{HTML}{ED017D}
+% \definecolor{ForestGreen}{HTML}{009B55}
+% \definecolor{ForestGreen}{HTML}{548F66}
+\definecolor{ForestGreen}{HTML}{028A0F}
+\definecolor{OliveGreen}{HTML}{808000}
+\definecolor{MidnightBlue}{HTML}{006795}
+\definecolor{Plum}{HTML}{92268F}
+
+\FXRegisterAuthor{bart}{anbart}{\color{magenta} {\underline{bart}}}
+\FXRegisterAuthor{marco}{anmarco}{\color{red} {\underline{marco}}}
+\FXRegisterAuthor{alb}{analberto}{\color{blue} {\underline{alberto}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Theorems settings %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+
+\newtcbtheorem[number within=section]{theorem}{Theorem}%
+  {colback=blue!10, 
+  colframe=blue!75!black,
+  fonttitle=\bfseries,
+  separator sign={\ $\blacktriangleright$}}{thm}
+
+\newtcbtheorem[use counter from=theorem]{lemma}{Lemma}%
+  {colback=blue!10, 
+  colframe=blue!75!black,
+  fonttitle=\bfseries,
+  separator sign={\ $\blacktriangleright$}}{lem}
+
+\newtcbtheorem[use counter from=theorem]{defi}{Definition}%
+  {colback=green!3, 
+  colframe=green!60!black,
+  fonttitle=\bfseries,
+  separator sign={\ $\blacktriangleright$}}{defi}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               GENERAL MACROS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\HSLtag}{\scalebox{1.25}{%
+  \begin{tikzpicture}
+  \draw (0.1,0.2) -- (0.2,0.115) -- (0.3,0.2) ;
+  %
+  \draw (0.1,0.2) -- (0.15,0.1) ;
+  \draw (0.3,0.2) -- (0.25,0.1) ;
+  %
+  \draw (0.12,0.1) -- (0.2,0.05) -- (0.28,0.1) ;
+  %
+  \draw (0.2,0) circle (0.12) ;
+  \draw (0.16,0.04) circle (0.01) ;
+  \draw (0.24,0.04) circle (0.01) ;
+  \draw (0.15,-0.07) -- (0.25,-0.07) ;
+  \end{tikzpicture}
+}}
+
+\newcommand{\HSLbox}{\rule{1ex}{1ex}}
+
+\newcommand{\HSL}[1][]{\vbox{\medskip\noindent\hrulefill \\[5pt]
+  \HSLtag \hspace{\stretch{1}}HIC SUNT
+  LEONES \; {#1}\hspace{\stretch{1}} \HSLtag \\ \smallskip\noindent\hrulefill \\}}
+
+%%% If/then check for empty strings (requires xifthen for \ifempty)
+\newcommand{\ifempty}[3]{%
+  \ifthenelse{\isempty{#1}}{#2}{#3}%
+}
+
+\newcommand{\ifdots}[3]{%
+  \ifthenelse{\equal{#1}{...}}{#2}{#3}%
+}
+
+\newcommand{\hidden}[1]{}
+
+\newcommand{\redrule}[2]{
+\prooftree
+{#1}
+\justifies
+{#2}
+\endprooftree
+}
+
+\newcommand{\namedef}[2]
+{\begin{center}\begin{tabular}{lr}
+      {$#2$}
+      & \qquad
+      {\emph{#1}}
+    \end{tabular}\end{center}
+}
+
+% \newcommand{\bvec}[1]{\boldmath\ensuremath{#1}}
+\newcommand{\bvec}[1]{\mathbold{\ensuremath{#1}}}
+
+% Circled tex
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=0.9pt] (char) {\scriptsize{#1}};}}
+
+% \newcommand{\mypar}[1]{\vspace{-0.2cm}\paragraph*{#1}}
+\newcommand{\mypar}[1]{\paragraph*{#1}}
+
+\newcommand{\keyterm}[1]{\textbf{\emph{#1}}}%
+
+
+% \newcommand{\change}[2]{{\marginpar{{\color{red}\scriptsize\textbf{#1}}}}{{\color{red}{#2}}}}%
+% \newcommand{\changeNoMargin}[1]{{\color{red}{#1}}}%
+% \renewcommand{\change}[2]{#2}
+% \renewcommand{\changeNoMargin}[1]{#1}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               MACROS FOR SETS AND SEQUENCES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\relR}{\mathrel{\mathcal{R}}}
+
+\newcommand{\Real}[1]{\mathrm{Real}}
+\newcommand{\tuple}[1]{\ensuremath{\langle {#1} \rangle}}
+
+\newcommand{\codefont}{\fontsize{9}{9}\selectfont}
+\newcommand{\code}[1]{{\tt\codefont {#1}}}
+\newcommand{\lineno}[1]{{\tt\codefont {\textcolor{NavyBlue}{#1}}}}
+
+
+% for braces in alltt mode
+\newcommand{\braceleft}{\symbol{`\{}}
+\newcommand{\braceright}{\symbol{`\}}}
+\newcommand{\angleleft}{\symbol{`\<}}
+\newcommand{\angleright}{\symbol{`\<}}
+% \newcommand{\mytilde}{\scalebox{0.85}{\url{~}}}
+\newcommand{\mytilde}{\raisebox{-3pt}{{\symbol{`\~}}}}
+\newcommand{\mydash}{\raisebox{0pt}{{\symbol{`\-}}}}
+
+\newcommand\bslash{\symbol{`\\}}
+\def\etc{etc.\@\xspace}
+\newcommand{\Eg}{E.g.\@\xspace}
+\newcommand{\eg}{e.g.\@\xspace}
+\newcommand{\ie}{i.e.\@\xspace}
+\newcommand{\wrt}{w.r.t.\@\xspace}
+
+% \newcommand{\emptyseq}{[]}
+\newcommand{\emptyseq}{\varepsilon}
+\newcommand{\idx}[2]{{#1}_{#2}}
+\newcommand{\fst}{\mathit{fst}}
+\newcommand{\snd}{\mathit{snd}}
+\newcommand{\thd}{\mathit{thd}}
+
+\renewcommand{\epsilon}{\varepsilon}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               MACROS FOR THEOREMS AND PROOFS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \theoremstyle{plain}% default
+% \newtheorem{thm}{Theorem}
+\newtheorem{applemma}[subsection]{Lemma}
+% \crefname{applemma}{lemma}{lemmas} %%% does not work
+% \Crefname{applemma}{Lemma}{Lemmas}
+% \newtheorem{prop}[thm]{Proposition}
+% \newtheorem*{cor}{Corollary}
+% \theoremstyle{definition}
+% \newtheorem{defn}{Definition}
+% \newtheorem{example}{Example}
+
+
+\newenvironment{proofof}[2]{%
+  \subsection*{Proof of {#1}~\ref{#2}}
+  \label{#2-proof}
+  % \qedhere did not work
+  \def\myqed{\qed}
+  \renewcommand{\qedhere}{\hfill\qed\global\def\myqed{}}
+  % Also re-print the theorem statement
+  % FIXME: disabled due to apparent bug in thmools + hyperref (Ubuntu 12.04)
+  % FIXME: it works without the final star, but references get messed up
+  %\csname #1\endcsname
+  % \begin{proof}
+  }%
+  % {\end{proof}}
+  {\myqed}
+
+%% \newenvironment{proofof}[1]{%
+%%   \ifempty{#1}
+%%   {\subsection*{Proof of~{#1}}}
+%%   {\subsection*{Proof of~{#1}}}
+%%   % Also re-print the theorem statement
+%%   % FIXME: disabled due to apparent bug in thmools + hyperref (Ubuntu 12.04)
+%%   % FIXME: it works without the final star, but references get messed up
+%%   %\csname #1\endcsname
+%%   % \begin{proof}
+%%   }%
+%%   % {\end{proof}}
+%%   {}
+
+
+\def\finex{{\unskip\nobreak\hfil
+\penalty50\hskip1em\null\nobreak\hfil$\blacklozenge$
+\parfillskip=0pt\finalhyphendemerits=0\endgraf}}
+
+\newcommand{\BTC}{\textup{%
+  \leavevmode
+  \vtop{\offinterlineskip %\bfseries
+    \setbox0=\hbox{B}%
+    \setbox2=\hbox to\wd0{\hfil\hskip-.03em
+    \vrule height .3ex width .15ex\hskip .08em
+    \vrule height .3ex width .15ex\hfil}
+    \vbox{\copy2\box0}\box2}}\xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               MACROS FOR ACCOUNTS, USERS, APPLICATIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Transaction Authorizations
+\newcommand{\authTx}{{\sf auth}} % user authorization
+\newcommand{\authPr}{{\sf pr}} % authorization predicate
+
+% \def\pmvColor{\color{MidnightBlue}}
+\def\pmvColor{\color{ForestGreen}}
+\def\appColor{\color{Plum}}
+\def\accColor{\color{ForestGreen}}
+
+\newcommand{\accFmt}[1]{{\accColor{\sf{#1}}}} % account formatting
+\newcommand{\pmvFmt}[1]{{\pmvColor{\sf{#1}}}} % active account formatting
+\newcommand{\appFmt}[1]{{\appColor{\sf{#1}}}} % application account formatting
+\newcommand{\confFmt}[1]{{\sf{#1}}} % application account formatting
+
+\newcommand{\AccU}{\accFmt{\mathbb{X}}\xspace} % universe of ALL accounts
+\newcommand{\PmvU}{\pmvFmt{\mathbb{A}}\xspace} % universe of ALL user accounts
+\newcommand{\AppU}{\appFmt{\mathbb{C}}\xspace} % universe of ALL application accounts
+\newcommand{\ConfU}{\confFmt{\mathbb{\C}}\xspace} % universe of ALL configurations
+
+
+\newcommand{\acc}[2][]{\accFmt{#2}_{#1}\xspace}
+\newcommand{\pmv}[2][]{\pmvFmt{#2}_{\pmvColor{#1}}\xspace}
+\newcommand{\app}[2][]{\appFmt{#2}_{\appColor{#1}}\xspace}
+
+\newcommand{\pmvA}[1][]{\pmv[{#1}]{A}}
+\newcommand{\pmvAi}[1][]{\pmv[{#1}]{A'}}
+\newcommand{\pmvB}[1][]{\pmv[{#1}]{B}}
+\newcommand{\pmvC}[1][]{\pmv[{#1}]{C}}
+\newcommand{\pmvM}[1][]{\pmv[{#1}]{M}} % mallory
+\newcommand{\pmvO}[1][]{\pmv[{#1}]{O}} % oracle
+\newcommand{\pmvP}[1][]{\pmv[{#1}]{P}}
+\newcommand{\accX}[1][]{\acc[{#1}]{X}} % account
+\newcommand{\accY}[1][]{\acc[{#1}]{Y}} % account
+\newcommand{\accXi}[1][]{\acc[{#1}]{X'}} 
+\newcommand{\appC}[1][]{\app[{#1}]{C}} % applications
+\newcommand{\appCi}[1][]{\app[{#1}]{C'}} 
+\newcommand{\Adv}{\pmv{Adv}} % adversary
+
+\newcommand{\PmvP}[1][]{\pmvFmt{\mathcal{P}}_{#1}} % arbitrary set of participants
+
+% LP: borrowing accounts
+\newcommand{\borrAcc}[1]{\mathit{bAcc}_{#1}}
+% LP: undercollateralized accounts
+\newcommand{\ucAcc}[1]{\mathit{ucAcc}_{#1}} 
+% LP: recoverable, undercollateralized (uc) accounts
+\newcommand{\rUcAcc}[1]{\mathit{rUcAcc}_{#1}} 
+% LP: non-recoverable uc accounts
+\newcommand{\nrUcAcc}[1]{\mathit{nrUcAcc}_{#1}} 
+% LP: non-recoverable loan fraction
+\newcommand{\fracUcLoanVal}[1]{\mathit{ucLoanVal}_{#1}} 
+% LP: non-recoverable user loan amount
+\newcommand{\nrLoanVal}[1]{V^{\textit{nrl}}_{#1}} 
+% LP: non-recoverable debt fraction
+\newcommand{\fracNrUcLoanVal}[1]{\mathit{nrUcLoanVal}_{#1}} 
+
+% LP: Minimum collateralizatoin
+\newcommand{\cMin}{\mathit{C}_{\mathit{min}}}
+% LP: Liquidation discount
+\newcommand{\rLiq}{\mathit{r}_{liq}}
+
+% Token supply
+\newcommand{\supply}[2][]{\mathit{S}_{#1}{#2}} 
+
+% AMM: Token reserves
+\newcommand{\res}[2]{\mathit{R}_{#2}\ifempty{#1}{}{({#1})}} 
+
+% Type of a transaction 
+\newcommand{\txType}[1]{\mathit{type}({#1})}
+
+% Token types affected by a transaction
+\newcommand{\txTok}[1]{\mathit{tok}({#1})}
+
+% Wallets affected by a transaction
+\newcommand{\txWal}[1]{\mathit{wal}({#1})}
+
+% Concurrency between transactions
+\newcommand{\concurRel}{\#}
+
+\newcommand{\gain}[3][]{\mathit{G}_{#2}(\ifempty{#1}{}{{#1},}{#3})}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               MACROS FOR META-VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Syntactic categories
+
+\newcommand{\Den}{\sf Den} % set of denotations
+\newcommand{\Val}{\sf Val} % set of currency values
+\newcommand{\Vars}{\sf Var} % set of variables
+
+\newcommand{\br}{t}
+\newcommand{\bri}{t'}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               MACROS FOR TRANSACTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\txScaling}{0.9}
+
+
+% \def\colorTx{\color{ForestGreen}}
+\def\txColor{\color{MidnightBlue}}
+\def\fieldColor{\color{Plum}}
+\newcommand{\txFmt}[1]{{\txColor{\sf #1}}}
+
+\newcommand{\tx}[2][]{\txFmt{#2}_{\txColor{#1}}}
+\newcommand{\txT}[1][]{\tx[#1]{T}}
+\newcommand{\txTC}{\txT[c]}
+\newcommand{\txTR}{\txT[r]}
+\newcommand{\txTi}[1][]{\txFmt{T'_{\txColor{{#1}}}}}
+\newcommand{\txTii}[1][]{\txFmt{T''_{\txColor{{#1}}}}}
+\newcommand{\txTiii}[1][]{\txFmt{T'''_{\txColor{{#1}}}}}
+% \newcommand{\txf}[1][]{\txFmt{{f}_{#1}}}
+\newcommand{\txR}[1][]{\txFmt{T^{\it r}_{\it #1}}}
+% \newcommand{\txR}[1][]{\tx[#1]{T^r}}
+\newcommand{\TxU}{{\txColor{\mathbb{X}}}}
+
+\newcommand{\prevtx}[2]{{#1}^{-1}({#2})}
+\newcommand{\prevtxf}[3]{{#1}^{-1}({#2},{#3})}
+
+\newcommand{\uswtxT}[1][]{\tx[#1]{\tilde{T}}}
+\newcommand{\uswtxTi}[1][]{\txFmt{\tilde{T}'_{\txColor{\it #1}}}}
+
+\newcommand{\txSubs}[1][]{\txFmt{\Sigma}_{\txColor{#1}}}
+\newcommand{\txsubs}[3][]{\{{#2}\ifempty{#1}{}{({#1})} \mapsto {#3}\}}
+\newcommand{\txsubsneq}[3][]{\{{#2}\ifempty{#1}{}{(\neq{#1})} \mapsto {#3}\}}
+
+\newcommand{\txTag}[3][]{{\fieldColor\sf #3}\ifempty{#1}{\ifempty{#2}{}{: {#2}}}{({#1})\ifempty{#2}{}{: {#2}}}}
+
+\newcommand{\txIn}[2][]{\txTag[{#1}]{#2}{in}}
+\newcommand{\txWit}[2][]{\txTag[{#1}]{#2}{wit}}
+\newcommand{\txOut}[2][]{\txTag[{#1}]{#2}{out}}
+\newcommand{\txAfterAbs}[2][]{\txTag[{#1}]{#2}{absLock}}
+\newcommand{\txAfterRel}[2][]{\txTag[{#1}]{#2}{relLock}}
+\newcommand{\txf}{\txTag{}{f}} % transaction field
+\newcommand{\txarg}{\txTag{}{arg}}
+\newcommand{\txscript}{\txTag{}{scr}}
+\newcommand{\txval}{\txTag{}{val}}
+
+% arg fields for token txs
+\newcommand{\tkop}{\txTag{}{op}}
+\newcommand{\tkown}{\txTag{}{owner}}
+\newcommand{\tkval}{\txTag{}{tkval}}
+\newcommand{\tkid}{\txTag{}{tkid}}
+
+\newcommand{\timeT}{t}
+
+\DeclareMathAlphabet{\mathbfsf}{\encodingdefault}{\sfdefault}{bx}{n}
+
+\newcommand{\bcEmpty}{{\txColor{\emptyseq}}}
+\newcommand{\bcB}[1][]{{\txColor{\lambda_{#1}}}}
+\newcommand{\bcBi}[1][]{{\txColor{\lambda'_{#1}}}}
+\newcommand{\bcBii}[1][]{{\txColor{\lambda''_{#1}}}}
+% \newcommand{\bcB}[1][]{{\mathbfsf{\txColor{B}}}_{\txColor{#1}}}
+% \newcommand{\bcBi}[1][]{{\mathbfsf{\txColor{B}'}}_{\txColor{#1}}}
+% \newcommand{\bcBii}[1][]{{\mathbfsf{\txColor{B}''}}_{\txColor{#1}}}
+\newcommand{\bcAt}[2]{(#1, #2)}
+\newcommand{\consistent}{\rhd}
+\newcommand{\notConsistent}{\centernot{\rhd}}
+
+
+% Transaction templates
+\newcommand{\templT}[1][]{\txFmt{\ifempty{#1}{t}{{t}_{#1}}}}
+\newcommand{\templTi}[1][]{\txFmt{\ifempty{#1}{t'}{{t'}_{#1}}}}
+
+\newcommand{\txVariant}[2][]{{\it #2} \ifempty{#1}{}{\ensuremath{\langle {#1} \rangle}}}
+
+
+\DeclareMathOperator*{\argmax}{arg\,max} 
+
+% \newcommand{\max}[1]{\operatorname{max}({#1})}
+% \newcommand{\min}[1]{\operatorname{cod}({#1})}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               MACROS FOR GENERIC MATH
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\zero}{\mathbf{0}}
+\newcommand{\fv}[1]{\ifempty{#1}{\operatorname{fv}}{\operatorname{fv}(#1)}}
+\newcommand{\eqdef}{\triangleq}
+\newcommand{\mmdef}{\mbox{$\;\stackrel{\textrm{\tiny def}}{=}\;$}}
+\newcommand{\mmid}{\,\|\,}
+
+
+\newcommand{\irule}[2]{\dfrac{#1}{#2}}
+
+% \newcommand{\irule}[2]{
+%   \begin{array}{c}
+%     {#1}  \\ \hline
+%     {#2}
+%   \end{array}}
+
+\newcommand{\subs}[2]{\{\nicefrac{#1}{#2}\}}
+
+\newcommand{\sidebyside}[2]{
+  \begin{tabular}{ll}
+    \begin{minipage}{.5\linewidth} {#1}  \end{minipage}
+    &
+    \begin{minipage}{.5\linewidth} {#2}  \end{minipage}
+  \end{tabular}
+}
+
+\newcommand{\mapstopart}{\rightharpoonup}
+
+\newcommand{\bnfdef}{::=}
+% \newcommand{\bnfmid}{\;\big|\;}
+\newcommand{\bnfmid}{\;|\;}
+
+\newcommand{\nrule}[1]{{\scriptsize \textsc{#1}}}
+\newcommand{\smallnrule}[1]{{\tiny \textsc{#1}}}
+\newcommand{\sem}[2][]{\mbox{\ensuremath{\llbracket{#2}\rrbracket_{#1}}}}
+\newcommand{\semext}[3]{\mbox{\ensuremath{\llbracket{#3}\rrbracket^{#1}_{#2}}}}
+
+\newcommand{\dom}[1]{\operatorname{dom} {#1}}
+\newcommand{\ran}[1]{\operatorname{ran} {#1}}
+\newcommand{\cod}[1]{\operatorname{cod} {#1}}
+
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\Int}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\QNN}{\mathbb{Q}_0^{+}}
+\newcommand{\RNN}{\mathbb{R}_{\geq 0}}
+\newcommand{\RP}{\mathbb{R}_{> 0}}
+
+% \newcommand{\powset}[1]{\wp(#1)}
+\newcommand{\powset}[1]{2^{#1}}
+\newcommand{\bind}[2]{\nicefrac{#2}{#1}}
+\newcommand{\setenum}[1]{\{#1\}}
+\newcommand{\setcomp}[2]{\left\{{#1} \,\middle|\, {#2}\right\}}
+% \newcommand{\setcomp}[2]{\{{#1} \,\mid\, {#2}\}}
+\newcommand{\entails}{\vdash}
+\newcommand{\seq}[1]{\langle {#1} \rangle}
+\newcommand{\seqat}[2]{{#1}.{#2}}
+
+\newcommand{\lbl}[2]{\pmv{#1} \says \, {#2}}
+
+\newcommand{\wealth}[1]{{\mathit{wealth}({#1})}}
+\newcommand{\payoff}[3]{\Phi({#1},{#2},{#3})}
+\newcommand{\exppayoff}[4]{\mathit{{\rm E}_{\Phi}}({#1},{#2},{#3},{#4})}
+
+\newenvironment{barttheorem}[2][]{\noindent\textbf{{#2}{#1}.}\it}{}
+\newenvironment{bartproof}[1]{\noindent\textbf{Proof of~#1.}}{\smallskip}
+\newenvironment{bartdef}[1]{\noindent\begin{minipage}{\textwidth}\bigskip\begin{
+definition}\textnormal{\textbf{#1}} \\ \hbra \begin{center} \begin{minipage}{\gn
+at}}{\end{minipage}\end{center} \hket\end{definition}\medskip\end{minipage}}
+
+% \newcounter{fact}
+%\spnewtheorem{notation}{Notation}{\bfseries}{\rmfamily}
+% \spnewtheorem{counterexample}{Counterexample}{\itshape}{\rmfamily}
+
+%\def\endex{{\unskip\nobreak\hfil
+%\penalty50\hskip1em\null\nobreak\hfil$\blacklozenge$
+%\parfillskip=0pt\finalhyphendemerits=0\endgraf}}
+\def\endex{\qed}
+\newcommand{\qedex}{\ensuremath{\diamond}}
+
+\newcommand{\error}[1]{\textcolor{BrickRed}{#1}}
+\newcommand{\warning}[1]{\textcolor{BurntOrange}{#1}}
+\newcommand{\info}[1]{\textcolor{NavyBlue}{#1}}
+
+\crefname{appendix}{appendix}{appendices}
+\Crefname{appendix}{Appendix}{Appendices}
+\crefname{notation}{notation}{notations}
+\Crefname{notation}{Notation}{Notations}
+
+% colors
+\definecolor{LightGrey}{rgb}{0.95,0.95,0.95}
+\definecolor{keyword}{HTML}{7F0055}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               MACROS FOR TOKENS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\tokColor{\color{magenta}}
+\newcommand{\tokFmt}[1]{{\tokColor{#1}}}
+
+% minted token 
+\newcommand{\tokM}[2]{\setenum{{#1},{#2}}}
+
+\newcommand{\tokT}[1][]{\tokFmt{\tau_{#1}}}
+\newcommand{\tokTi}[1][]{\tokFmt{\tau'_{#1}}}
+\newcommand{\tokTii}[1][]{\tokFmt{\tau''_{#1}}}
+\newcommand{\TokU}[1][]{\tokFmt{\mathbb{T}_{#1}}} % universe of all tokens
+\newcommand{\TokUF}{\tokFmt{\TokU[\sf f]}} % subset of free tokens
+% \newcommand{\TokUM}{\tokFmt{\TokU[\sf m]}} % subset of minted tokens
+
+% LTS Model
+
+\newcommand{\ltsLabel}[1][]{{\txT_{#1}}}
+\newcommand{\ltsLabeli}[1][]{{\txTi_{#1}}}
+
+\newcommand{\transferOp}{{\txColor{\sf xfer}}} % token transfer
+\newcommand{\actTransfer}[3]{\ifempty{#1}{}{{#1}:}\transferOp({#2},{#3})} % token transfer
+
+% Transactions
+\newcommand{\ammDepositOp}{{\txColor{\sf dep}}}
+\newcommand{\ammSwapOp}{{\txColor{\sf swap}}}
+\newcommand{\ammRedeemOp}{{\txColor{\sf rdm}}}
+\newcommand{\ammSwapParOp}[1]{{\txColor{\sf swap}^{#1}}}
+
+\newcommand{\actAmmDeposit}[5]{\ifempty{#1}{}{{#1}:}\ammDepositOp({#2}:{#3},{#4:}{#5})}
+
+\newcommand{\actAmmRedeem}[2]{\ifempty{#1}{}{{#1}:}\ammRedeemOp({#2})}
+
+\newcommand{\actAmmSwapExact}[5]{\ifempty{#1}{}{{#1}:}\ammSwapParOp{#2}({#3},{#4},{#5})}
+
+\newcommand{\actAmmSwapGuarded}[6]{\ifempty{#1}{}{{#1}:}\ammSwapParOp{#2}({#3}:{#4},{#5}:{#6})}
+\newcommand{\actAmmDepositGuarded}[5]{\ifempty{#1}{}{{#1}:}\ammDepositOp({#2}:{#3},{#4}:{#5})}
+
+
+\newcommand{\tok}[1]{\mathit{tok}({#1})}
+%\newcommand{\gen}[3][]{\mathit{gen}_{{#1}}^{\txColor{#2}}({#3})}
+
+\newcommand{\tokBal}[1][]{\sigma_{#1}} % balance
+\newcommand{\tokBali}[1][]{\sigma'_{#1}} % balance
+\newcommand{\tokBalii}[1][]{\sigma''_{#1}} % balance
+\newcommand{\wal}[2]{{#1}[{#2}]}
+\newcommand{\walA}[2][]{\wal{\pmvA[#1]}{#2}}
+\newcommand{\walB}[2][]{\wal{\pmvB[#1]}{#2}}
+\newcommand{\walC}[2][]{\wal{\pmvC[#1]}{#2}}
+
+\newcommand{\val}[2][]{#2_{#1}} % values
+\newcommand{\valV}[1][]{\val[#1]{v}}
+\newcommand{\valVi}[1][]{\val[#1]{v'}}
+\newcommand{\valVii}[1][]{\val[#1]{v''}}
+\newcommand{\valViii}[1][]{\val[#1]{v'''}}
+
+\newcommand{\valSXa}{\alpha}
+\newcommand{\valSXai}{\alpha'}
+\newcommand{\valSXb}{\beta}
+\newcommand{\valSXbi}{\beta'}
+\newcommand{\valSXc}{\gamma}
+\newcommand{\valSXci}{\gamma'}
+
+\newcommand{\true}{\mathit{true}}
+\newcommand{\false}{\mathit{false}}
+
+\newcommand{\verify}[5]{\mathit{verify}_{#1}^{{#3},{#4}}({#2},{#5})}
+\newcommand{\checksig}[5]{\ifempty{#3}{\ifempty{#4}{\mathit{versig}_{#1}({#2},{#5})}{\mathit{versig}_{#1}^{{#3},{#4}}({#2},{#5})}}{\mathit{versig}_{#1}^{{#3},{#4}}({#2},{#5})}}
+
+
+%%% Internal/External exchange rate
+% \newcommand{\X}[2][]{\ifempty{#1}{X^{\! e}}{X^i_{#1}}\ifempty{#2}{}{({#2})}}
+\newcommand{\X}[2][]{\ifempty{#1}{X}{X_{#1}}\ifempty{#2}{}{({#2})}}
+
+%%% Internal/External token prices
+% \newcommand{\exchO}[2][]{\ifempty{#1}{P^e}{P^i_{#1}}\ifempty{#2}{}{{#2}}}
+\newcommand{\exchO}[2][]{\ifempty{#1}{P}{P_{#1}}\ifempty{#2}{}{({#2})}}
+
+% Swap rate
+\newcommand{\SX}[2][]{\mathit{SX}_{\phi_{#1}}\ifempty{#2}{}{({#2})}}
+
+% Slippage
+\newcommand{\SL}[2][]{\ifempty{#1}{\Delta X}{\Delta X_{#1}}\ifempty{#2}{}{({#2})}}
+
+% Redeem rate
+\newcommand{\RX}[4]{\mathit{RX}^{#1}_{#2}\ifempty{#3}{}{(#3,#4)}}
+
+\newcommand{\ERpar}[3][]{\mathit{X}^{#1}_{#2}\ifempty{#3}{}{({#3})}}
+\newcommand{\ERLnew}[2][]{\mathit{XL}_{#1}\ifempty{#2}{}{({#2})}}
+\newcommand{\ERRnew}[2][]{\mathit{XR}_{#1}\ifempty{#2}{}{({#2})}}
+
+\newcommand{\SRpar}[3][]{\mathit{SX}_{#1}^{#2}\ifempty{#3}{}{({#3})}}
+\newcommand{\SRLnew}[1][]{\mathit{XL}^{\ammSwapOp}_{#1}}
+\newcommand{\SRRnew}[1][]{\mathit{XR}^{\ammSwapOp}_{#1}}
+\newcommand{\RRLnew}[1][]{\mathit{XL}^{\ammRedeemOp}_{#1}}
+\newcommand{\RRRnew}[1][]{\mathit{XR}^{\ammRedeemOp}_{#1}}
+
+% Zeta
+\newcommand{\Zfee}{\zeta_{\fee}}
+\newcommand{\Z}[4]{\zeta_{\fee} (#1, #2, #3, #4)}
+
+
+%%% Configurations
+
+\newcommand{\confG}[1][]{\Gamma_{#1}}
+\newcommand{\confGi}[1][]{\Gamma'_{#1}}
+\newcommand{\confGii}[1][]{\Gamma''_{#1}}
+\newcommand{\confGiii}[1][]{\Gamma'''_{#1}}
+
+\newcommand{\confD}[1][]{\Delta_{#1}}
+\newcommand{\confDi}[1][]{\Delta'_{#1}}
+\newcommand{\confDii}[1][]{\Delta''_{#1}}
+
+%%% Automatic Market Maker state
+\newcommand{\amm}[2]{\setenum{{#1},{#2}}} % reserve
+\newcommand{\bigamm}[2]{\Big\{ {#1},\, {#2} \Big\}} % reserve
+\newcommand{\ammR}[1][]{r_{#1}} % reserve
+\newcommand{\ammRi}[1][]{r'_{#1}}
+\newcommand{\ammRii}[1][]{r''_{#1}}
+
+%%% Invariant relationship for AMM
+\newcommand{\invR}[1][]{I_{#1}}
+
+\newcommand{\fee}{\phi} 
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+
+%%%%%%%%%%%%%%%%%%%%%% Cite Lean Macros %%%%%%%%%%%%%%%%%%%%%%
+
+% cite-lean-root()
+
+% The following line is auto populated by the comment
+\newcommand{\citeLeanRoot}{https://mamboleano.github.io/lean4-amm-fees/}
+
+\newcommand{\citeLeanLink}[1]{\href{\citeLeanRoot/#1}{\includegraphics[scale=0.1]{lean-logo.pdf}}}
+\newcommand{\citeLeanDocsLink}[2]{\href{\citeLeanRoot/#1}{#2}}
+
+\newcommand{\citeLean}[1]{\vspace{10pt}\llap{\vspace{26pt}\citeLeanLink{#1} \quad\vspace{-55pt}}}
+\newcommand{\citeLeanMissing}{\vspace{10pt}\llap{\vspace{26pt} \fcolorbox{red}{yellow}{\includegraphics[scale=0.1]{lean_logo.pdf}} \quad\vspace{-55pt}}}

@@ -1,0 +1,616 @@
+\section{Different things from original paper} 
+\label{sec:arbitrage}
+
+\[
+  \SX{x,\ammR[0],\ammR[1]}
+  \; = \;
+  \frac{\fee \, \ammR[1]}{\ammR[0] + \fee \, x}
+  \qquad\text{where } 
+  \fee \in [0,1]
+\]
+
+
+\[
+\irule
+{
+  \begin{array}{l}
+    \tokBal{\tokT[0]} \geq x
+    \qquad
+    y = x \cdot \SX{x,\ammR[0],\ammR[1]} < \ammR[1]
+  \end{array}
+}
+{\begin{array}{l}
+   \walA{\tokBal}
+   \mid
+   \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}
+   \mid
+   \confG
+   \xrightarrow{\actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}}
+   \\[4pt]
+   \walA{\tokBal - x:\tokT[0] + y:\tokT[1]}
+   \mid
+   \amm{\ammR[0]+ \phi x:\tokT[0]}{\ammR[1]-y:\tokT[1]}
+   \mid
+   \confG
+   \hspace{-5pt}
+ \end{array}
+}
+\nrule{[SwapProtocolFee]}
+\]
+
+This is the equivalent of Lemma 3.2
+
+\begin{lem}[Swap gain]
+  \label{lem:swap:gain}
+  Let $\confG = \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$,
+  and let $\txT = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$
+  be enabled in $\confG$.
+  Then:
+  \begin{align*}
+    \gain[{\confG}]{\pmvA}{\txT}
+    & = \phantom{-}
+      x \cdot \big(
+      \SX{x,\ammR[0],\ammR[1]} \, \exchO{\tokT[1]}
+      -
+      \exchO{\tokT[0]}
+      \big)
+      \cdot
+      \Big(
+      1 - \frac{\tokBal[\pmvA]\tokM{\tokT[0]}{\tokT[1]}}{\supply[\confG]{\tokM{\tokT[0]}{\tokT[1]}}} \cdot \frac{\fee \exchO{\tokT[0]} - \SX{x,\ammR[0],\ammR[1]} \exchO{\tokT[1]}}{\exchO{\tokT[0]} - \SX{x,\ammR[0],\ammR[1]} \exchO{\tokT[1]}}
+      \Big)
+    && \text{if $\walA{\tokBal[\pmvA]} \in \confG$}
+  \end{align*}
+
+  Or, if $\tokBal[\pmvA]\tokM{\tokT[0]}{\tokT[1]} = 0$, 
+
+  \begin{align*}
+    \gain[{\confG}]{\pmvA}{\txT}
+    & = \phantom{-}
+      x \cdot \big(
+      \SX{x,\ammR[0],\ammR[1]} \, \exchO{\tokT[1]}
+      -
+      \exchO{\tokT[0]}
+      \big)
+  \end{align*}
+\end{lem}
+
+\begin{proofof}{Lemma}{lem:swap:gain}
+    Let's prove only the case where $\tokBal[\pmvA]\tokM{\tokT[0]}{\tokT[1]} = 0$, since it is the one that we will be using mostly. 
+
+    Let $\confG \xrightarrow{\txT} \confGi$ and let $y = x \cdot \SX{x, \ammR[0], \ammR[1]}$. By the definition of Gain we have that: 
+    \begin{equation}
+        \gain[\confG]{\pmvA}{\txT} = W_{\pmvA}(\confGi) - W_{\pmvA}(\confG)
+    \end{equation}
+
+By definition of net worth we have that: 
+    \begin{align*}
+    W_{\pmvA}(\confG)
+    & = \tokBal[\pmvA](\tokT[0]) \cdot \exchO{\tokT[0]}
+      \; + \;
+      \tokBal[\pmvA](\tokT[1]) \cdot \exchO{\tokT[1]}
+    \\
+    & +
+      \textstyle \sum_{\tokT \not\in \setenum{\tokT[0],\tokT[1], \tokM{\tokT[0]}{\tokT[1]}}}
+      \tokBal[\pmvA](\tokT) \cdot \exchO[\confG]{\tokT}
+    \\
+    W_{\pmvA}(\confGi)
+    & = (\tokBal[\pmvA](\tokT[0]) - x) \cdot \exchO{\tokT[0]}
+      \; + \;
+      (\tokBal[\pmvA](\tokT[1]) + y) \cdot \exchO{\tokT[1]}
+    \\
+    & +
+      \textstyle \sum_{\tokT \not\in \setenum{\tokT[0],\tokT[1], \tokM{\tokT[0]}{\tokT[1]}}}
+      \tokBal[\pmvA](\tokT) \cdot \exchO[\confGi]{\tokT}
+  \end{align*}
+Reminding that $\pmvA$ does not hold any minted tokens. Since 
+  $\supply[\confG]{\tokM{\tokT[0]}{\tokT[1]}} = \supply[\confGi]{\tokM{\tokT[0]}{\tokT[1]}}$
+  and
+  $\exchO[\confG]{\tokT} = \exchO[\confGi]{\tokT}$
+  for all $\tokT \neq \tokM{\tokT[0]}{\tokT[1]}$:
+
+  \begin{align*}
+    W_{\pmvA}(\confGi) - W_{\pmvA}(\confG)
+    & = y \cdot \exchO{\tokT[1]}
+      - x \cdot \exchO{\tokT[0]}
+    \\
+    & =     x \cdot \big(
+      \SX{x,\ammR[0],\ammR[1]} \, \exchO{\tokT[1]}
+      -
+      \exchO{\tokT[0]}
+      \big)
+  \end{align*}
+\end{proofof}
+
+
+\begin{lem}[Swap rate \emph{vs.} exchange rate]
+  \label{lem:swap:gain-SX-X}
+  Let $\confG = \walA{\tokBal} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$ 
+  be such that $\tokBal{\tokM{\tokT[0]}{\tokT[1]}} = 0$, and
+  let $\txT = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$ 
+  be enabled in $\confG$.
+  Then: 
+  \begin{align*}
+      \gain[{\confG}]{\pmvA}{\txT} \circ 0
+      \iff
+      \SX{x,\ammR[0],\ammR[1]} \circ \X{\tokT[0],\tokT[1]}
+       && \text{for $\circ \in \setenum{<, =, >}$}
+  \end{align*}
+\end{lem}
+
+\begin{proofof}{Lemma}{lem:swap:gain-SX-X}
+    let $y = x \cdot \SX{x, \ammR[0], \ammR[1]}$. Since we know that $\tokBal[\pmvA]\tokM{\tokT[0]}{\tokT[1]} = 0$, then by Lemma~\ref{lem:swap:gain} we have that: 
+    \begin{align*}
+    \gain[{\confG}]{\pmvA}{\txT}
+    \circ 0
+    \iff
+    & y \ \exchO{\tokT[1]}
+      -
+      x \ \exchO{\tokT[0]}
+      \circ 0
+    \\
+    \iff
+    & \frac{y}{x} \circ \frac{\exchO{\tokT[0]}}{\exchO{\tokT[1]}}
+    \\
+    \iff
+    & \SX{x,\ammR[0],\ammR[1]} \circ \X{\tokT[0],\tokT[1]} \tag*{\qedhere} % move qed symbol to last line
+  \end{align*}
+\end{proofof}
+
+\begin{defi}[Additivity]
+  \label{def:sr-additivity}
+  A swap rate function $\SX{}$ is \emph{additive} when:
+  \[
+    \valSXa = \SX{x,\ammR[0],\ammR[1]},\;
+    \valSXb = \SX{y,\ammR[0]+\fee x,\ammR[1]-\valSXa x}
+    \implies
+    \SX{x+y,\ammR[0],\ammR[1]} = 
+    \frac{\valSXa x + \valSXb y}{x+y}
+  \]
+\end{defi}
+
+\begin{proofof}{Theorem}{def:sr-additivity}
+    We want to prove that our constprod function $\SX{}$ satisfies this definition. From our definition of $\SX{}$ we have that: 
+    \begin{align*}
+    \valSXa 
+    & = \SX{x,\ammR[0],\ammR[1]} = \frac{\fee \ammR[1]}{\ammR[0]+\fee x}
+    \\
+    \valSXb 
+    & = \SX{y,\ammR[0]+\fee x,\ammR[1]-\valSXa x}
+      = \frac{\fee (\ammR[1]-\valSXa x)}{\ammR[0]+\fee x+ \fee y}
+      = \frac{\fee \cdot (\ammR[1] - \frac{\fee \ammR[1] x}{\ammR[0] + \fee x})}{\ammR[0] + \fee x + \fee y}
+    \\
+    & = \frac{\fee \cdot \Big ( \frac{\ammR[1](\ammR[0] + \fee x) - \fee \ammR[1] x}{\ammR[0] + \fee x + \fee y}\Big )}{\ammR[0] + \fee x + \fee y}
+      = \frac{\fee \ammR[1] \ammR[0]}{(\ammR[0] + \fee x)(\ammR[0] + \fee x + \fee y)}
+  \end{align*}
+
+  Then, 
+  \begin{align*}
+      \frac{\valSXa x + \valSXb y}{x+y} 
+      & = \frac{1}{x + y} \cdot \Big ( 
+          \frac{\fee \ammR[1] x}{\ammR[0] + \fee x} + 
+          \frac{\fee \ammR[1] \ammR[0] y}{(\ammR[0] + \fee x)(\ammR[0] + \fee x + \fee y)}
+          \Big )
+    \\
+     & = \frac{1}{x + y} \cdot \Big ( 
+         \frac{\fee \ammR[0] \ammR[1] x + \fee^2 \ammR[1] x^2 + \fee^2 \ammR[1] x y + \fee \ammR[0] \ammR[1] y}{(\ammR[0] + \fee x)(\ammR[0] + \fee x + \fee y)}
+         \Big )
+    \\
+     & = \frac{1}{x + y} \cdot \Big ( 
+         \frac{\fee \ammR[1] (\ammR[0] x + \fee x^2 + \fee x y + \ammR[0] y)}
+              {(\ammR[0] + \fee x)(\ammR[0] + \fee x + \fee y)}
+         \Big )
+    \\
+     & = \frac{1}{x + y} \cdot \Big ( 
+         \frac{\fee \ammR[1] (\ammR[0] + \fee x)(x + y)}
+              {(\ammR[0] + \fee x)(\ammR[0] + \fee x + \fee y)}
+         \Big )
+    \\
+     & = \frac{\fee \ammR[1]}{\ammR[0] + \fee(x + y)}
+    \\
+     & = \SX{x+y, \ammR[0], \ammR[1]}
+  \end{align*}
+\end{proofof}
+
+\newpage
+
+\begin{thm}[Additivity of swap]
+  \label{thm:sr-additivity}
+  Let $\confG \xrightarrow{\txT[0]} \confG[0] \xrightarrow{\txT[1]} \confG[1]$,
+  with
+  \mbox{$\txT[i] = \actAmmSwapExact{\pmvA}{}{x_i}{\tokT[0]}{\tokT[1]}$} 
+  for $i \in \setenum{0,1}$.
+  If $\SX{}$ is additive, then:
+  \[
+    \confG \xrightarrow{\actAmmSwapExact{\pmvA}{}{x_0+x_1}{\tokT[0]}{\tokT[1]}} \confG[1]
+  \]
+\end{thm}
+
+\begin{proofof}{Theorem}{thm:sr-additivity}
+    We have to prove the additivity of swap again since we modified the swap rule.
+    Given $\confG = \walA{\tokBal} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$ we have that: 
+    \begin{align*}
+        y_0       & = x_0 \cdot \SX{x_0, \ammR[0], \ammR[1]} \\ 
+        \confG[0] & = \walA{\tokBal - x_0:\tokT[0] + y_0:\tokT[1]} \mid \amm{\ammR[0] + \fee x_0:\tokT[0]}{\ammR[1] - y_0:\tokT[1]} \mid \confD
+    \end{align*}
+
+    and also: 
+    \begin{align*}
+        y_1       & = x_1 \cdot \SX{x_1, \ammR[0] + \fee x_0, \ammR[1] - y_0} \\ 
+        \confG[1] & = \walA{\tokBal - x_0 - x_1:\tokT[0] + y_0 + y_1:\tokT[1]} \mid \amm{\ammR[0] + \fee x_0 + \fee x_1:\tokT[0]}{\ammR[1] - y_0 - y_1:\tokT[1]} \mid \confD
+    \end{align*}
+
+    We know that $\SX{}$ is additive by Definition~\ref{def:sr-additivity}, hence: 
+    \begin{align*}
+        \SX{x_0 + x_1, \ammR[0], \ammR[1]} = \frac{y_0 + y_1}{x_0 + x_1}
+    \end{align*}
+
+    So, applying the ~\nrule{[Swap]} rule to $\confG$ yields: 
+
+    \[
+    \confG 
+    \xrightarrow{\actAmmSwapExact{\pmvA}{}{x_0+x_1}{\tokT[0]}{\tokT[1]}} 
+    \walA{\tokBal - (x_0 + x_1):\tokT[0] + (y_0 + y_1):\tokT[1]} \mid \amm{\ammR[0]+ \fee(x_0 + x_1):\tokT[0]}{\ammR[1]- (y_0+y_1):\tokT[1]} \mid \confD
+    \tag*{\qedhere}
+  \]
+    
+\end{proofof}
+
+\begin{lem}[Additivity of swap gain]
+  \label{lem:swap-gain:additivity}
+  Let \mbox{$\txT(x) = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$},
+  and let $\confG \xrightarrow{\txT(x_0)} \confGi$.
+  If $\SX{}$ is output-bounded and additive, and $\tokBal[\pmvA]\tokM{\tokT[0]}{\tokT[1]} = 0$ then:
+  \[
+    \gain[\confG]{\pmvA}{\txT(x_0+x_1)} 
+    \; = \;
+    \gain[\confG]{\pmvA}{\txT(x_0)} + \gain[\confGi]{\pmvA}{\txT(x_1)} 
+  \]
+\end{lem}
+
+\begin{proofof}{Lemma}{lem:swap-gain:additivity}
+    We are only able to prove this for the case in which $\pmvA$ does not hold minted tokens. 
+
+    Since $\SX{}$ is output-bounded, then $\txT(x_0)$ and $\txT(x_0 + x_1)$ are enabled in $\confG$, and $\txT(x_1)$ is enabled in $\confGi$. Let: 
+    \begin{align*}
+        \valSXa = \SX{x_0, \ammR[0], \ammR[1]} 
+        \quad 
+        \valSXb = \SX{x_1, \ammR[0] + \fee x_0, \ammR[1] - \valSXa x_0}
+    \end{align*}
+
+    By Definition~\ref{def:sr-additivity}(Additivity of $\SX{}$) we have that: 
+    \begin{equation}
+    \label{eq:swap:add}
+        \valSXc = \SX{x_0 + x_1, \ammR[0], \ammR[1]} 
+                = \frac{\valSXa x_0 + \valSXb x_1}{x_0 + x_1}
+    \end{equation}
+
+    Then: 
+    \begin{align*}
+        & \gain[\confG]{\pmvA}{\txT(x_0+x_1)} - \gain[\confG]{\pmvA}{\txT(x_0)}
+        \\
+        & = (x_0 + x_1)(\valSXc \exchO{\tokT[1]} - \exchO{\tokT[0]}) - 
+            x_0(\valSXa \exchO{\tokT[1]} - \exchO{\tokT[0]}) 
+        && \text{(Lemma~\ref{lem:swap:gain})}
+        \\
+        & = (\valSXc(x_0 + x_1) - \valSXa x_0)\exchO{\tokT[1]} - x_1 \exchO{\tokT[0]}
+        \\
+        & = \Big ( \frac{\valSXa x_0 + \valSXb x_1}{x_0 + x_1} \cdot (x_0 + x_1) - \valSXa x_0 \Big )\exchO{\tokT[1]} - x_1 \exchO{\tokT[0]}
+        && \text{(Eq. ~\ref{eq:swap:add})}
+        \\
+        & = \valSXb x_1 \exchO{\tokT[1]} - x_1 \exchO{\tokT[0]}
+        \\
+        & = x_1 (\valSXb \exchO{\tokT[1]} - \exchO{\tokT[0]})
+        \\
+        & = \gain[\confGi]{\pmvA}{\txT(x_1)}
+        && \text{(Lemma ~\ref{lem:swap:gain})}
+    \end{align*}
+    
+\end{proofof}
+
+\begin{thm}[Helper 2]
+  % \label{lem:arbitrage:max}
+  \label{thm:helper2}  
+  Let $\confG = \walA{\tokBal} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$ 
+  be such that $\tokBal{\tokM{\tokT[0]}{\tokT[1]}} = 0$.
+  For all $x > 0$, 
+  let $\txT(x) = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$.
+  Let $x_0$ be such that:
+  \begin{equation}
+    \label{eq:arbitrage:max:x0}
+    % \SX{0,\ammR[0]+x_0,\ammR[1]-x_0 \cdot \SX{x_0,\ammR[0],\ammR[1]}}
+    \X[\confGi]{\tokT[0],\tokT[1]} = \X{\tokT[0],\tokT[1]}
+    \qquad
+    \text{ where }
+    \confG \xrightarrow{\txT(x_0)} \confGi
+  \end{equation}
+  Let $x_1 > 0  \land x_1 < x_0$, then: 
+  \begin{equation}
+    \X{\tokT[0],\tokT[1]} < \X[\Gamma_1]{\tokT[0],\tokT[1]} < \X[\Gamma]{\tokT[0],\tokT[1]}
+    \qquad
+    \text{ where }
+    \confG \xrightarrow{\txT(x_1)} \Gamma_1
+  \end{equation}
+  
+\end{thm}
+
+This is the equivalent of Helper 3
+\begin{thm}[Helper 3]
+  \label{thm:helper-3}  
+  Let $\confG = \walA{\tokBal} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$ 
+  be such that $\tokBal{\tokM{\tokT[0]}{\tokT[1]}} = 0$.
+  For all $x > 0$, 
+  let $\txT(x) = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$.
+  Take $x_0 > 0$, then:
+  \begin{equation}
+    \X[\confGi]{\tokT[0],\tokT[1]} < \SX{x_0, \ammR[0], \ammR[1]} < \X[\Gamma]{\tokT[0],\tokT[1]}
+    \qquad
+    \text{ where }
+    \confG \xrightarrow{\txT(x_0)} \confGi
+  \end{equation}
+  
+\end{thm}
+
+\begin{proofof}{Theorem}{thm:helper-3} 
+    We split the proof in two parts: 
+    \begin{itemize}
+        \item $\SX{x_0, \ammR[0], \ammR[1]} < \X[\Gamma]{\tokT[0],\tokT[1]}$: 
+        \begin{align*}
+            \X[\confG]{\tokT[0],\tokT[1]} 
+                & = \lim_{z \rightarrow 0} \SX{z,\ammR[0],\ammR[1]} && \text{(by Def. of X)}
+                \\
+                & > \SX{x_0, \ammR[0], \ammR[1]}                    && \text{Strict. Mono.}
+        \end{align*}
+
+        \item $\X[\confGi]{\tokT[0],\tokT[1]} < \SX{x_0, \ammR[0], \ammR[1]}$:
+
+            Let $\valSXa = \SX{x_0, \ammR[0], \ammR[1]}$. 
+            
+            Before continuing the proof, lets first prove that
+                \begin{equation}
+                    \label{eq:SX-less-SX-fee}
+                    \frac{\fee(\ammR[1] - \valSXa x_0)}{\ammR[0] + \fee x_0} < \frac{\fee \ammR[1]}{\ammR[0] + \fee x_0}
+                \end{equation}
+                \begin{proof}
+                    \begin{align*}
+                        & \frac{\fee(\ammR[1] - \valSXa x_0)}{\ammR[0] + \fee x_0} < \frac{\fee 
+                          \ammR[1]}{\ammR[0] + \fee x_0}    && \text{(Den. is positive)}
+                        \\
+                        \iff & \fee \ammR[1] - \fee \valSXa x_0 - \fee \ammR[1] < 0
+                        \\
+                        \iff & - \fee \valSXa x_0 < 0
+                    \end{align*}
+                    Since all the factors are positive, then it is true.
+                \end{proof}
+                Now we can continue the proof:
+                \begin{align*}
+                    \X[\confGi]{\tokT[0],\tokT[1]} 
+                    & = 
+                    \lim_{z \rightarrow 0} \SX{z,\ammR[0] + \fee x_0,\ammR[1] - \valSXa x_0} && \text{(by Def. of X)}
+                    \\
+                    & =
+                    \frac{\fee(\ammR[1] - \alpha x_0)}{\ammR[0] + \fee x_0}
+                    \\
+                    & < 
+                    \frac{\fee \ammR[1]}{\ammR[0] + \fee x_0} && \text{by Eq~\ref{eq:SX-less-SX-fee}}
+                    \\
+                    & = 
+                    \SX{x_0, \ammR[0], \ammR[1]}
+                \end{align*}
+    \end{itemize}
+\end{proofof}
+
+Finally, Lemma 6.3:
+
+\begin{thm}[Arbitrage]
+  % \label{lem:arbitrage:max}
+  \label{thm:arbitrage}  
+  Let $\confG = \walA{\tokBal} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$ 
+  be such that $\tokBal{\tokM{\tokT[0]}{\tokT[1]}} = 0$.
+  For all $x > 0$, 
+  let $\txT(x) = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$.
+  Let $x_0$ be such that:
+  \begin{equation}
+    \label{eq:arbitrage:max:x0}
+    % \SX{0,\ammR[0]+x_0,\ammR[1]-x_0 \cdot \SX{x_0,\ammR[0],\ammR[1]}}
+    \X[\confGi]{\tokT[0],\tokT[1]} = \X{\tokT[0],\tokT[1]}
+    \qquad
+    \text{ where }
+    \confG \xrightarrow{\txT(x_0)} \confGi
+  \end{equation}
+  % If $\tokBal{\tokT[0]} \geq x_0$ and
+  If $\SX{}$ is output-bounded, strictly monotonic, additive and satisfies Helpers 2 and 3, then:
+  \[
+    \forall x \neq x_0
+    \; : \;
+    \gain[{\confG}]{\pmvA}{\txT(x_0)}
+    \; > \;
+    \gain[{\confG}]{\pmvA}{\txT(x)}
+  \]
+
+  Furthermore, if such an $x_0$ exists, then it is unique. 
+\end{thm}
+
+\begin{proofof}{Theorem}{thm:arbitrage}
+  % Since $\tokBal{\tokT[0]} \geq x_0$ and
+  % $\SX{}$ is output-bounded, by Lemma~\ref{lem:sr-output-bound}
+  Let $x_0$ and $\confGi$ be as in the hypotheses, \ie:
+  
+  \[
+  \confG
+  \xrightarrow{\txT(x_0)}
+  \confGi = \walA{\tokBali} \mid \amm{\ammR[0]+\fee x_0:\tokT[0]}{\ammR[1]-\valSXa x_0:\tokT[1]} \mid \confD
+  \qquad \text{where }
+  \begin{array}{l}
+    \valSXa = \SX{x_0,\ammR[0],\ammR[1]}
+    \\
+    \X[\confGi]{\tokT[0],\tokT[1]} = \X{\tokT[0],\tokT[1]}
+  \end{array}
+  \]
+  
+  We have two cases, depending on whether $x > x_0$ or $x < x_0$.
+  \begin{itemize}
+    
+  \item If $x > x_0$, let $x_1>0$ be such that $x = x_0 + x_1$.
+    Since $\SX{}$ is output-bounded and additive, 
+    then by Lemma 5.7 (Additivity of Gain):
+    \begin{equation}
+      \label{eq:arbitrage:max:x-gt-x0}
+      \gain[{\confG}]{\pmvA}{\txT(x)}
+      \; = \;
+      \gain[{\confG}]{\pmvA}{\txT(x_0)}
+      +
+      \gain[{\confGi}]{\pmvA}{\txT(x_1)}
+    \end{equation}
+    We have that:
+    \begin{align*}
+      \SX{x_1,\ammR[0]+x_0,\ammR[1]-\valSXa x_0} 
+      & < \lim_{z \rightarrow 0} \SX{z,\ammR[0]+x_0,\ammR[1]-\valSXa x_0}  
+      && \text{(strict monotonicity)}
+      \\
+      & = \X[\confGi]{\tokT[0],\tokT[1]}
+      && \text{def.\ $\X[\confGi]{}$}
+      \\
+      & = \X{\tokT[0],\tokT[1]}
+      && \text{(hypothesis)}
+    \end{align*}
+    Then, by Lemma~\ref{lem:swap:gain-SX-X} we obtain
+    $\gain[{\confGi}]{\pmvA}{\txT(x_1)} < 0$.
+    % 
+    By \Cref{eq:arbitrage:max:x-gt-x0},
+    we conclude that  
+    $\gain[{\confG}]{\pmvA}{\txT(x)} < \gain[{\confG}]{\pmvA}{\txT(x_0)}$.
+
+  \item If $x < x_0$, let $x_1>0$ be such that $x_0 = x + x_1$.
+    Since $\SX{}$ is output-bounded, then by Lemma 5.2 (Swap Enabled), 
+    $\txT(x_0)$ and $\txT(x)$ are enabled in $\confG$,
+    and $\txT(x_1)$ is enabled in the state $\confG[1]$ 
+    reached after performing $\txT(x_1)$, \ie:
+    \[
+      \confG
+      \xrightarrow{\txT(x)} 
+      \confG[1]
+      \xrightarrow{\txT(x_1)} 
+      \confGi
+    \]
+    Since $\SX{}$ is output-bounded and additive, 
+    then by Lemma 5.7 (Additivity of Gain):
+    \[
+      \gain[{\confG}]{\pmvA}{\txT(x_0)}
+      \; = \;
+      \gain[{\confG}]{\pmvA}{\txT(x)}
+      +
+      \gain[{\confG[1]}]{\pmvA}{\txT(x_1)}
+    \]
+  \end{itemize}
+
+  Let 
+  \begin{align*}
+      \valSXa & = \SX{x_0,\ammR[0],\ammR[1]} 
+      \\
+      \valSXb & = \SX{x,\ammR[0],\ammR[1]}
+      \\
+      \valSXc & = \SX{x_1,\ammR[0] + \fee x,\ammR[1] - \valSXb x}
+  \end{align*}
+
+    Now, let's prove: 
+    \begin{equation}
+      \gain[{\confG[1]}]{\pmvA}{\txT(x_1)} > 0
+    \end{equation}
+
+    Again, if we want to apply Lemma~\ref{lem:swap:gain-SX-X}(Lemma 3.3) we need to show that: 
+
+    \begin{equation}
+      \SX{x_1, \ammR[0] + \fee x, \ammR[1] - \valSXb x} > \X{\tokT[0], \tokT[1]}
+    \end{equation}
+
+    \begin{proof}
+        \begin{align*}
+            \X{\tokT[0]} & = \X[{\confGi}]{\tokT[0], \tokT[1]} && \text{by hyp}
+            \\
+            & < \SX{x_1, \ammR[0] + \fee x, \ammR[1] - \valSXb x} && \text{by Helper 3}
+        \end{align*}
+    \end{proof}
+
+    So, finally: 
+    \begin{align*}
+      & \gain[{\confG}]{\pmvA}{\txT(x_0)} \; = \; \gain[{\confG}]{\pmvA}{\txT(x)}
+      +
+      \gain[{\confG[1]}]{\pmvA}{\txT(x_1)}
+      \\
+      \implies & \gain[{\confG}]{\pmvA}{\txT(x)} \; = \; \gain[{\confG}]{\pmvA}{\txT(x_0)}
+      -
+      \gain[{\confG[1]}]{\pmvA}{\txT(x_1)}
+    \end{align*}
+
+    Now, to prove the uniqueness, assume by contradiction that there exists an $x_1 \neq x_0$ that satisfies Equation~\ref{eq:arbitrage:max:x0}. But then we have both $\gain[\confG]{\pmvA}{\txT(x_1)} > \gain[\confG]{\pmvA}{\txT(x_0)}$ and $\gain[\confG]{\pmvA}{\txT(x_0)} > \gain[\confG]{\pmvA}{\txT(x_1)}$.
+
+\end{proofof}
+
+\begin{lem}[Arbitrage and constant product with fee]
+  \label{lem:arbitrage:const-prod-fee}
+  Let $\confG = \walA{\tokBal} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}$,
+  and let:
+  \begin{equation}
+    \label{eq:arbitrage:const-prod}
+    x_0 
+    \; = \;
+    \frac {\sqrt{\frac{\exchO{\tokT[1]}}{\exchO{\tokT[0]}} \fee \ammR[0] \ammR[1]} - \ammR[0]}
+          {\fee}
+  \end{equation}
+  If $\SX{}$ is the constant product swap rate with fee and $x_0 > 0$,
+  then $\actAmmSwapExact{\pmvA}{}{x_0}{\tokT[0]}{\tokT[1]}$
+  is the solution to the arbitrage game in $\confG$.
+\end{lem}
+
+\begin{proofof}{Lemma}{lem:arbitrage:const-prod-fee}
+  Let $\confG \xrightarrow{\txT} \confGi = \walA{\tokBali} \mid \amm{\ammR[0]+\fee x_0:\tokT[0]}{\ammR[1]-x_0 \cdot \SX{x_0,\ammR[0],\ammR[1]}:\tokT[1]}$.
+  We have that:
+  \begin{align*}
+    \X[\confGi]{\tokT[0],\tokT[1]}
+    & = 
+    \frac{\fee (\ammR[1] - x_0 \cdot \SX{x_0,\ammR[0],\ammR[1]})}{\ammR[0]+\fee x_0}
+    && \text{by Definition of $X_{\confGi}$}
+    \\
+    & =
+      \frac
+      {\fee (\ammR[1] - x_0 \cdot \frac{\fee \ammR[1]}{\ammR[0]+\fee x_0})}
+      {\ammR[0]+\fee x_0}
+    && \text{by Definition of $\SX{}$}
+    \\
+    & = \frac
+        {\fee \Big ( \frac
+                    {\ammR[1](\ammR[0] + \fee \ammR[0]) - \fee \ammR[1] x_0}
+                    {\ammR[0] + \fee x_0}
+        \Big )}
+        {\ammR[0] + \fee x_0}
+    \\
+    & = \frac
+        {\fee{(\ammR[1] (\ammR[0] + \fee x_0) - \fee \ammR[1] x_0) }}
+        {(\ammR[0] + \fee x_0)^2}
+    \\
+    & = \frac{\fee \ammR[0]\ammR[1]}{(\ammR[0] + \fee x_0)^2}
+    \\
+    & = \frac
+        {\fee \ammR[0]\ammR[1]}
+        {\ammR[0] + \fee \Big ( \frac
+                                {\sqrt{\frac{\exchO{\tokT[1]}}{\exchO{\tokT[0]}} \fee \ammR[1] \ammR[0]} - \ammR[0]}
+                                {\fee}
+                        \Big )^2}
+    && \text{by~\Cref{eq:arbitrage:const-prod}}
+    \\
+    & = \frac
+        {\fee \ammR[0]\ammR[1]}
+        {\Big ( \sqrt{\frac{\exchO{\tokT[1]}}{\exchO{\tokT[0]}} \fee \ammR[1] \ammR[0]} 
+        \Big )^2}
+    \\
+    & = \frac
+        {\fee \ammR[0]\ammR[1]}
+        {\frac{\exchO{\tokT[1]}}{\exchO{\tokT[0]}} \fee \ammR[1] \ammR[0]}
+    \\
+    & = \frac{\exchO{\tokT[0]}}{\exchO{\tokT[1]}}
+    \\
+    & = \X{\tokT[0],\tokT[1]}
+    && \text{by Definition of $\X{}$}
+  \end{align*}
+  The thesis follows from Theorem~\ref{thm:arbitrage}.
+\end{proofof}

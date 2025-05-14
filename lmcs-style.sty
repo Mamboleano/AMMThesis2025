@@ -1,0 +1,83 @@
+%% lmcs-style.sty - extracted from lmcs.cls
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{lmcs-style}[2025/04/22 extracted macros from lmcs.cls]
+
+% Required packages
+% \usepackage{package1,package2,...}
+
+% Custom theorem environments
+\newtheorem{env}[thm]{Environment}
+\newtheorem{env}[thm]{Environment}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{slem}[thm]{Sublemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{asm}[thm]{Assumption}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{rems}[thm]{Remarks}
+\newtheorem{exa}[thm]{Example}
+\newtheorem{exas}[thm]{Examples}
+\newtheorem{defi}[thm]{Definition}
+\newtheorem{conv}[thm]{Convention}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{prob}[thm]{Problem}
+\newtheorem{oprob}[thm]{Open Problem}
+\newtheorem{oprobs}[thm]{Open Problems}
+\newtheorem{algo}[thm]{Algorithm}
+\newtheorem{obs}[thm]{Observation}
+\newtheorem{desc}[thm]{Description}
+\newtheorem{fact}[thm]{Fact}
+\newtheorem{qu}[thm]{Question}
+\newtheorem{oqu}[thm]{Open Question}
+\newtheorem{pty}[thm]{Property}
+\newtheorem{clm}[thm]{Claim}
+\newtheorem{nota}[thm]{Notation}
+\newtheorem{com}[thm]{Comment}
+\newtheorem{coms}[thm]{Comments}
+\newtheorem{defiC}[thm]{Definition}
+\newtheorem{thmC}[thm]{Theorem}
+\newtheorem{propC}[thm]{Proposition}
+\newtheorem{lemC}[thm]{Lemma}
+
+% Custom commands
+\newcommand{\headertextsf}[1]{\textsf{\fontfamily{phv}\selectfont #1}}
+\newcommand{\revisionname}{Revision Note}
+\renewcommand{\address}[2][]{%
+\renewcommand{\topfraction}{0.95}   % let figure take up nearly whole page
+\renewcommand{\textfraction}{0.05}  % let figure take up nearly whole page
+\renewcommand{\dOi}{\@lmcsvolume(\@lmcsissue:\@lmcspaper)\@lmcsyear}
+\renewcommand{\by}{\crCby}
+\renewcommand{\bynd}{\crCby\crCnd}
+\renewcommand{\byncnd}{\crCby\crCnc\crCnd}
+\renewcommand{\bync}{\crCby\crCnc}
+\renewcommand{\byncsa}{\crCby\crCnc\crCsa}
+\renewcommand{\bysa}{\crCby\crCsa}
+\renewcommand{\nd}{\crCnd}
+\renewcommand{\ndnc}{\crCnd\crCnc}
+\renewcommand{\nc}{\crCnc}
+\renewcommand{\ncsa}{\crCnc\crCsa}
+\renewcommand{\sa}{\crCsa}
+\newcommand{\@lmcsOrigHeightRecip}{0.00390625}
+\newcommand{\backuprestoremacros}[2]{%
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{amsart}}
+\ProcessOptions\relax
+
+\LoadClass[11pt,reqno]{amsart}
+\DeclareRobustCommand{\crC}{%
+  \ifmmode{\nfss@text{\text@cc}}\else\text@cc\fi}
+\DeclareRobustCommand{\crCnd}{%
+  \ifmmode{\nfss@text{\text@ccnd}}\else\text@ccnd\fi}
+\DeclareRobustCommand{\crCby}{%
+  \ifmmode{\nfss@text{\text@ccby}}\else\text@ccby\fi}
+\DeclareRobustCommand{\crCnc}{%
+  \ifmmode{\nfss@text{\text@ccnc}}\else\text@ccnc\fi}
+\DeclareRobustCommand{\crCsa}{%
+  \ifmmode{\nfss@text{\text@ccsa}}\else\text@ccsa\fi}
+\DeclareRobustCommand\lmcsorcid[1]{%
+\texorpdfstring{%
+\hspace*{2pt}%
+
+% Custom environments
+\renewenvironment{abstract}{%
+\newenvironment{revision}{%

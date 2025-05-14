@@ -1,0 +1,142 @@
+\section{Arbitrage}
+In this section we want to present the final results of this paper. In particular, our main goal was to find the optimal amount of tokens that a user can swap given a certain state of the AMM that maximizes his gain. A first attempt at doing this could be mimicking the result found in \cite{BCL22lmcs}
+, i.e. the optimal value is the one that brings the internal rate equal to the external one. We will ofter refer to this as the AMM reaching the "Equilibrium". 
+
+The first challenge that arises is finding this particular value, which we specify in the Lemma below. 
+
+\albnote{Se ci focalizziamo soltanto nella constant product, potremo considerare introdurre il lemma di sotto prima dei lemmi/teoremi che ipotizzano (senza svelare) l'esistenza e unicità della $x0$ che porta l'amm in equilibrio. Ad esempio, Th 2.10. Ma anche 2.9.}
+
+\marconote{Sono d'accordo, secondo me dato che considero solo la constant product posso introdurre prima questo lemma, poi un lemma per dimostrare l'unicità di questo valore, e poi il lemma per l'equilibrio. Per ultimo invece il teorema del valore massimo}
+
+\citeLean{AMMLib/FeeVersion/Arbitrage.html\#SX.fee.arbitrage.constprod.equil_value} % cite-lean(SX.fee.arbitrage.constprod.equil_value)
+\begin{lemma}{Balance swap value}{arbitrage:balance}
+  Let $\confG = \walA{\tokBal[\pmvA]} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}$,
+  and let:
+  \begin{equation}
+    \label{eq:arbitrage:balance}
+    x_0 
+    \; = \;
+    \frac
+        {-\sqrt{\exchO{\tokT[0]}} \ammR[0] (1 + \fee) + \sqrt{\ammR[0]} \sqrt{\exchO{\tokT[0]} \ammR[0] (-1 + \fee)^2 + 4 \exchO{\tokT[1]} \ammR[1] \fee^2}}
+        {2 \sqrt{\exchO{\tokT[0]}} \fee}
+  \end{equation}
+  If $\SX{}$ is the constant product swap rate, $x_0 \in \mathbb{R}>0$,   $\txT(x_0) = \actAmmSwapExact{\pmvA}{}{x_0}{\tokT[0]}{\tokT[1]}$ is a valid transaction and $\fee < 1$ then $\txT(x_0)$ bring the AMM to the balanced state, i.e. 
+  \begin{align*}
+      \X{\tokT[0], \tokT[1]} = \X[\confGi]{\tokT[0], \tokT[1]} 
+      & \qquad \text{where} \; \confG \xrightarrow{\actAmmSwapExact{\pmvA}{}{x_0}{\tokT[0]}{\tokT[1]}} \confGi
+  \end{align*}
+\end{lemma}
+
+Hence we know that this value, given the appropriate conditions, brings the AMM to the equilibrium. However, we are not sure, or better, we have not proved yet, that this is the only value that satisfies this condition. The following lemma states exactly this. 
+
+\citeLean{AMMLib/FeeVersion/Arbitrage.html\#SX.fee.arbitrage.constprod.solution_equil_unique} % cite-lean(SX.fee.arbitrage.constprod.solution_equil_unique)
+\begin{lemma}{Balance swap value uniqueness}{arbitrage:balance-unique}
+    Let $\confG = \walA{\tokBal[\pmvA]} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}$,
+  and let $x_0 \in \mathbb{R} > 0$ be s.t. $\txT(x_0) = \actAmmSwapExact{\pmvA}{}{x_0}{\tokT[0]}{\tokT[1]}$ is a valid transaction.
+  If $\SX{}$ is the constant product swap rate and 
+  \begin{align*}
+      \X{\tokT[0], \tokT[1]} = \X[\confGi]{\tokT[0], \tokT[1]}
+      & \qquad \text{where} \; \confG \xrightarrow{\actAmmSwapExact{\pmvA}{}{x_0}{\tokT[0]}{\tokT[1]}} \confGi
+  \end{align*}
+  then 
+  \begin{align*}
+      \neg \exists \; x_1 \in \mathbb{R}>0, x_1 \neq x_0 \; \land \;
+      \X{\tokT[0], \tokT[1]} = \X[\confGii]{\tokT[0], \tokT[1]}
+      & \qquad \text{where} \; \confG \xrightarrow{\actAmmSwapExact{\pmvA}{}{x_1}{\tokT[0]}{\tokT[1]}} \confGii
+  \end{align*}
+  i.e. $x_0$ is unique. 
+\end{lemma}
+
+From this lemma, we know that the value that brings the AMM to the equilibrium is unique. It is now natural to ask if such value is also the optimal value that maximizes the user's gain like it was for the previous model. However, this is not the case. 
+
+\marconote{add an example here that computes the gain for the equilibrium x and for one slightly bigger, and show that is is better}. 
+
+So, we know that this value is not the optimal one. However, it is very close to it, and it is still worth comparing the gain of this value to the one of every other value. The lemma below formalizes this comparison. 
+
+\citeLean{AMMLib/FeeVersion/Arbitrage.html\#SX.fee.arbitrage.constprod.equil_value_solution_arbitrage} % cite-lean(SX.fee.arbitrage.constprod.equil_value_solution_arbitrage)
+\begin{lemma}{Equilibrium value vs gain}{fee:equil-vs-gain}  
+  Let $\confG = \walA{\tokBal[\pmvA]} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$ 
+  be such that $\tokBal[\pmvA]{\tokM{\tokT[0]}{\tokT[1]}} = 0$.
+  For all $x > 0$, 
+  let $\txT(x) = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$.
+  Let $x_0$ be the one defined in ~\ref{eq:arbitrage:balance} and assume that $x_0 \in \mathbb{R}>0$
+  and  $\txT(x_0) = \actAmmSwapExact{\pmvA}{}{x_0}{\tokT[0]}{\tokT[1]}$ is a valid transaction.
+  
+  If $\SX{}$ is the constant product swap rate (~\ref{defi:const-prod}) and $\fee < 1$, then:
+  \begin{align*}
+    & \forall x < x_0 
+    \; : \;
+    \gain[{\confG}]{\pmvA}{\txT(x_0)}
+    \; > \;
+    \gain[{\confG}]{\pmvA}{\txT(x)}
+    \\
+    & \text{and}
+    \\
+    & \forall x > x_0 
+    \; : \;
+    (\gain[{\confG}]{\pmvA}{\txT(x_0)}
+    \; > \;
+    \gain[{\confG}]{\pmvA}{\txT(x)} \iff x > \frac{x_0}{\fee})
+   \end{align*}
+\end{lemma}
+
+So we know that the optimal value is between $x_0$ and $\frac{x_0}{\fee}$. The only thing left to do is finding such value that maximizes the gain
+
+\albnote{collegato al mio commento di sopra riguardo la notazione T(x), notare che sotto non viene usata. Meglio uniformare. }
+
+
+\albnote{Sempre assumendo che ci concentriamo soltnato sul constant product, sotto farei riferimento allo x0 identificato da Lemma 2.11.}
+
+\citeLean{AMMLib/FeeVersion/Maximal.html\#SX.fee.constprod.x_max_gain} % cite-lean(SX.fee.constprod.x_max_gain)
+
+\begin{lemma}{Max Gain Value}{fee:max-gain}
+  Let $\confG = \walA{\tokBal[\pmvA]} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}$ 
+  be such that $\tokBal[\pmvA]{\tokM{\tokT[0]}{\tokT[1]}} = 0$.
+  Let $x_0$ be such that:
+  \begin{equation}
+    \X[\confGi]{\tokT[0],\tokT[1]} = \X{\tokT[0],\tokT[1]}
+    \qquad
+    \text{ where }
+    \confG \xrightarrow{\txT(x_0)} \confGi
+  \end{equation}
+  Let $x_{max}$ be
+  \begin{equation}
+    \label{eq:fee:arbitrage:max-value}
+    x_{max} = x_0 + \frac
+        {-\sqrt{\exchO{\tokT[0]}} \ammR[0] - \sqrt{\exchO{\tokT[0]}} \fee x_0 + \sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}}
+        {\sqrt{\exchO{\tokT[0]}} \fee}
+  \end{equation}
+  If $\SX{}$ is the constant product swap rate function and $\fee < 1$, then:
+  \[
+    \forall x \neq x_{max}
+    \; : \;
+    \gain[{\confG}]{\pmvA}{\txT(x_{max})}
+    \; > \;
+    \gain[{\confG}]{\pmvA}{\txT(x)}
+  \]
+\end{lemma}
+
+Finally, it is also worth exploring if this is the only value that maximizes the gain, and this can be easily proved by contradiction, and stated in the lemma below. 
+
+\newpage 
+
+\citeLean{AMMLib/FeeVersion/Maximal.html\#SX.fee.constprod.x_max_unique} % cite-lean(SX.fee.constprod.x_max_unique)
+\begin{lemma}{Optimal swap value uniqueness}{arbitrage:optimal-unique}
+    Let $\confG = \walA{\tokBal[\pmvA]} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}$ be such that $\tokBal[\pmvA]{\tokM{\tokT[0]}{\tokT[1]}} = 0$.
+   Let $x_0 \in \mathbb{R} > 0$ be s.t. $\txT(x_0) = \actAmmSwapExact{\pmvA}{}{x_0}{\tokT[0]}{\tokT[1]}$ is a valid transaction.
+  If $\SX{}$ is the constant product swap rate, $\fee < 1$ and 
+  \begin{align*}
+      \X{\tokT[0], \tokT[1]} = \X[\confGi]{\tokT[0], \tokT[1]}
+      & \qquad \text{where} \; \confG \xrightarrow{\actAmmSwapExact{\pmvA}{}{x_0}{\tokT[0]}{\tokT[1]}} \confGi
+  \end{align*}
+  then 
+  \begin{align*}
+      \neg \exists \; x_1 \in \mathbb{R}>0 \; : \;  x_1 \neq x_{max} \; \land \;
+      \forall x \neq x_1
+    \; : \;
+    \gain[{\confG}]{\pmvA}{\txT(x_1)}
+    \; > \;
+    \gain[{\confG}]{\pmvA}{\txT(x)}
+  \end{align*}
+  i.e. $x_0$ is unique. 
+\end{lemma}

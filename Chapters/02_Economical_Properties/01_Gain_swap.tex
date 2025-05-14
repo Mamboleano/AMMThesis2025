@@ -1,0 +1,77 @@
+\section{Gain of swap actions}
+
+One of the key properties of our AMMs model is the user's gain. As we previously stated, we will only focus on the swap transactions; hence, it is only natural to measure the user's gain after a swap and to ask ourselves when this gain is positive. In the following lemma, we define the user's gain in terms of a valid swap transaction.
+
+\albnote{Nel paper LMCS/Lemma 3.2 c'è un caso per il gain di B diverso di A. Perché qui no? Non serve, assumo.}
+
+\marconote{Non serve, su Lean però ho dimostrato anche quel caso, quindi si può aggiungere anche questo teorema}
+
+\citeLean{AMMLib/FeeVersion/Basic.html\#SwapFee.self_gain_eq} % cite-lean(SwapFee.self_gain_eq)
+\begin{lemma}{Swap gain}{fee:swap:gain}
+  Let $\confG =  \walA{\tokBal[\pmvA]} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$,
+  % \bartnote{meglio specificare qui $\mid \walA{\tokBal[\pmvA]}$?}
+  and let $\txT = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$
+  be enabled in $\confG$.
+  Then:
+  \begin{align*}
+    \gain[{\confG}]{\pmvA}{\txT}
+    & = \phantom{-}
+      x \cdot \big(
+      \SX{x,\ammR[0],\ammR[1]} \, \exchO{\tokT[1]}
+      -
+      \exchO{\tokT[0]}
+      \big)
+      \cdot
+      \Big(
+      1 - \frac{\tokBal[\pmvA]\tokM{\tokT[0]}{\tokT[1]}}{\supply[\confG]{\tokM{\tokT[0]}{\tokT[1]}}}
+      \Big)
+  \end{align*}
+\end{lemma}
+
+This result is not different from the one formalized in \cite{BCL22lmcs}, simply because it does not depend on any particular swap function $\SX{}$. This result also captures how the gain depends on the number of minted tokens held by the user. Since we mostly focus on users that are just swapping tokens (and are not Liquidity Providers), it's worth analyzing the case where $\pmvA$ does not hold any minted token, which will come in hand later on.
+
+
+\citeLean{AMMLib/FeeVersion/Basic.html\#SwapFee.self_gain_no_mint_eq} % cite-lean(SwapFee.self_gain_eq)
+\begin{lemma}{Swap gain no mint}{fee:swap:gain_no_mint}
+% \bartnote{questo sembra un caso particolare, e lo metterei fuori dal lemma}
+  Let $\confG =  \walA{\tokBal[\pmvA]} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$ be such that $\tokBal[\pmvA]\tokM{\tokT[0]}{\tokT[1]} = 0$,
+  and let $\txT = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$
+  be enabled in $\confG$.
+  Then:
+
+  \begin{align*}
+    \gain[{\confG}]{\pmvA}{\txT}
+    & = \phantom{-}
+      x \cdot \big(
+      \SX{x,\ammR[0],\ammR[1]} \, \exchO{\tokT[1]}
+      -
+      \exchO{\tokT[0]}
+      \big)
+  \end{align*}
+\end{lemma}
+
+With this result, we can finally answer one of the key questions we posed ourselves: when the user's gain is positive upon a valid swap transaction. The following lemma defines this in a more general way, stating that the gain is strictly positive \emph{iff} the swap rate is strictly greater than the external exchange rate.
+
+\albnote{Quando aggiungerai il testo per guidare il lettore, conviene spiegare perché alcuni risultati escludono i  casi dove A non ha minted token.}
+
+\marconote{La ragione è che ci stiamo concentrando su player che non hanno liquidity? Oppure che i risultati si fanno molto più complessi se consideriamo anche i minted tokens? Il lemma di sotto per esempio non vale nel caso in cui il player ha dei minted tokens}
+
+\citeLean{AMMLib/FeeVersion/Basic.html\#SX.fee.swaprate_vs_exchrate} % cite-lean(SX.fee.swaprate_vs_exchrate)
+
+\begin{lemma}{Swap rate \emph{vs.} exchange rate}{fee:swap:gain-SX-X-fee}
+  Let $\confG = \walA{\tokBal[\pmvA]} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$ 
+  be such that $\tokBal{\tokM{\tokT[0]}{\tokT[1]}} = 0$, and
+  let $\txT = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$ 
+  be enabled in $\confG$.
+  Then: 
+  \begin{align*}
+      \gain[{\confG}]{\pmvA}{\txT} \circ 0
+      \iff
+      \SX{x,\ammR[0],\ammR[1]} \circ \X{\tokT[0],\tokT[1]}
+       && \text{for $\circ \in \setenum{<, =, >}$}
+  \end{align*}
+\end{lemma}
+
+This lemma is the first step towards finding the arbitrage solution, since it defines when it is convenient for a user to perform a swap transaction, comparing the swap rate with the external prices of the swapped tokens $\tokT[0]$ and $\tokT[1]$.
+
+\marconote{In the introduction, it is probably convenient to state that the ultimate goal is to define the arbitrage solution, i.e. what is the value that maximizes the user's gain upon a swap.}

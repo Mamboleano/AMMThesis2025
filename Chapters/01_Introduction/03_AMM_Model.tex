@@ -1,0 +1,271 @@
+\chapter{AMM model}
+% \section{AMM model}
+
+\bartnote{2 righe di intro ai contenuti del capitolo. Direi anche che la parte originale è la regola swap (ref al repo?). Organizzerei in sezioni}
+
+\marconote{La regola swap è uguale a quella del paper lmcs}
+
+\mypar{Tokens}
+
+We assume a set  $\TokU[0]$ of \keyterm{atomic token types},
+which represent native cryptocurrencies and application-specific tokens.
+For instance, $\TokU[0]$ may include ETH, the native cryptocurrency
+of Ethereum, and WBTC, \ie
+% \footnote{\url{https://wbtc.network/}}, 
+Bitcoins wrapped with the ERC20 interface for Ethereum tokens.
+A \keyterm{minted token type} is an unordered pair of distinct 
+atomic token types:
+if $\tokT[0]$ and $\tokT[1]$ are atomic token types 
+and $\tokT[0] \neq \tokT[1]$,
+then the minted token type $\tokM{\tokT[0]}{\tokT[1]}$ 
+represents shares in an AMM holding reserves of $\tokT[0]$ and $\tokT[1]$.
+We denote by $\TokU[1]$ the set of minted token types.
+In our model, tokens are \emph{fungible},
+\ie individual units of the same type are interchangeable.
+This means that amounts of tokens of the same type
+can be split into smaller parts,
+and two amounts of tokens of the same type can be joined.
+We use $\valV, \valVi, \ammR, \ammRi, x, x'$ to range over
+nonnegative real numbers ($\RNN$).
+We write $\TokU$ for the universe of all token types, 
+\ie $\TokU = \TokU[0] \cup \TokU[1]$,
+and we use $\tokT,\tokTi,\ldots$ to range over $\TokU$.
+We write \mbox{$\ammR:\tokT$} to denote $\ammR$ units
+of a token of type $\tokT$, either atomic or minted. 
+
+\mypar{Users and Wallets}
+
+We assume a set of \keyterm{users} $\PmvU$,
+ranged over by $\pmvA, \pmvAi, \ldots$
+We model the \keyterm{wallet} of a user $\pmvA$ as a term
+$\wal{\pmvA}{\tokBal[\pmvA]}$, where the finite partial map
+$\tokBal[\pmvA] \in \TokU \rightharpoonup \RNN$
+represents $\pmvA$'s token balance.
+
+\mypar{AMM states}
+
+We model an \keyterm{AMM} holding reserves of \mbox{$\ammR[0]:\tokT[0]$} and
+\mbox{$\ammR[1]:\tokT[1]$} (with $\tokT[0] \neq \tokT[1]$ and $\ammR[0]$ and $\ammR[1]$ strictly positive) 
+as an unordered pair \mbox{$\amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}$}.
+Since the order of the token reserves in an AMM is immaterial, 
+the terms \mbox{$\amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}$}
+and \mbox{$\amm{\ammR[1]:\tokT[1]}{\ammR[0]:\tokT[0]}$}
+denote exactly the same AMM.
+\bartnote{dire esplicitamente che sono entrambi $>0$}
+
+\mypar{Blockchain states}
+
+We model the interaction between users and AMMs
+as a labelled transition system (LTS).
+Its labels represent blockchain \keyterm{transactions}, while
+the \keyterm{states} $\confG, \confGi, \confD, \ldots$ are 
+finite non-empty compositions of wallets and AMMs.
+Formally, states are terms of the form:
+\[
+\wal{\pmvA[1]}{\tokBal[1]} \mid \cdots \mid \wal{\pmvA[n]}{\tokBal[n]}
+\mid
+\amm{\ammR[1]:\tokT[1]}{\ammRi[1]:\tokTi[1]}
+\mid \cdots \mid
+\amm{\ammR[k]:\tokT[k]}{\ammRi[k]:\tokTi[k]}
+\]
+and subject to the following conditions. For all $i \neq j$:
+\begin{enumerate}
+\item $\pmvA[i] \neq \pmvA[j]$ 
+  (each user has a single wallet);
+\item
+$\setenum{\tokT[i],\tokTi[i]} \neq \setenum{\tokT[j],\tokTi[j]}$ 
+(distinct AMMs cannot hold exactly the same token types).
+\end{enumerate}
+
+Note that these conditions allow AMMs 
+to have a common token type $\tokT$,
+\eg as in \mbox{$\amm{\ammR[1]:\tokT[1]}{\ammR:\tokT}$},
+\mbox{$\amm{\ammRi:\tokT}{\ammR[2]:\tokT[2]}$}, 
+thus enabling indirect trades between token pairs
+not directly provided by any AMM.
+%
+We stipulate that the ordering of terms in a state is immaterial.
+Hence, we consider two states $\confG$ and $\confGi$ to be equivalent 
+when they contain the same terms (regardless of their order). 
+For a term $Q$ and a state $\confG$, we write $Q \in \confG$
+when $\confG = Q \mid \confGi$, for some $\confGi$.
+Compared to \cite{BCL22lmcs} we do not focus on \emph{initial} or \emph{reachable} states in this work, since we only deal with swap transactions. Hence, we will only consider states where there are already some initialized AMMs. 
+
+\marconote{Aggiunto quest'ultima frase, da controllare}
+
+\mypar{Transactions}
+
+State transitions are triggered by transactions
+ $\ltsLabel, \ltsLabeli, \ldots$, which can have the following form
+(where $\tokT[0]$ and $\tokT[1]$ are atomic tokens):
+\[
+\actAmmSwapExact{\pmvA}{}{\valV}{\tokT[0]}{\tokT[1]}
+\]
+With this transactions, 
+$\pmvA$ tranfers $\valV:\tokT[0]$ to an AMM
+$\amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}$,
+receiving in return some units of $\tokT[1]$, which are removed from the AMM.
+
+
+We denote with
+$\txType{\txT}$ the type of $\txT$
+(\ie, $\ammDepositOp$, $\ammSwapOp$, or $\ammRedeemOp$),
+with $\txWal{\txT}$ the user whose wallet is affected by $\txT$,
+and with $\txTok{\txT}$ the set of token types affected by $\txT$.
+For example, if
+$\txT = \actAmmSwapExact{\pmvA}{}{\valV}{\tokT[0]}{\tokT[1]}$,
+then
+$\txType{\txT} = \ammSwapOp$,
+$\txWal{\txT} = \pmvA$, and
+$\txTok{\txT} = \setenum{\tokT[0],\tokT[1]}$.
+
+In the rest of this work, we will only deal with $\ammSwapOp$ transactions. We also introduce a notation to specify a swap transaction: 
+
+\[
+\txT(\valV) = \actAmmSwapExact{\pmvA}{}{\valV}{\tokT[0]}{\tokT[1]}
+\]
+
+
+\mypar{Token supply}
+
+We use $\supply[\confG]{\tokT}$ to denote the \keyterm{supply} of a token type $\tokT$ in a state $\confG$, defined 
+as the sum of the reserves of $\tokT$ in all the wallets and the AMMs
+in $\confG$.
+Formally, we define $\supply[\confG]{\tokT}$
+by induction on the structure of states as follows:
+\begin{equation*}
+  \supply[\walA{\tokBal}]{\tokT} = 
+  \begin{cases}
+    \tokBal \tokT & \text{if $\tokT \in \dom{\tokBal}$} \\
+    0 &\text{otherwise }
+  \end{cases}
+  \qquad
+  \supply[\amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}]{\tokT} =
+  \begin{cases}
+    \ammR[i] & \text{if $\tokT = \tokT[i]$} \\
+    0 & \text{otherwise}
+  \end{cases}
+  \qquad
+  \supply[\confG \mid \confGi]{\tokT} = \supply[\confG]{\tokT} + \supply[\confGi]{\tokT}
+\end{equation*}
+
+\mypar{AMM semantics: swap}
+
+Any user $\pmvA$ can swap $\valV$ units of $\tokT[0]$ in her wallet
+for some units of $\tokT[1]$ in an AMM 
+\mbox{$\amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}$}
+through the transaction
+\mbox{$\actAmmSwapExact{\pmvA}{}{\valV}{\tokT[0]}{\tokT[1]}$}.
+Symmetrically, $\pmvA$ can swap $\valV$ of her units of $\tokT[1]$ 
+for units of $\tokT[0]$ in the AMM through a transaction 
+\mbox{$\actAmmSwapExact{\pmvA}{}{\valV}{\tokT[1]}{\tokT[0]}$}.
+%
+The \keyterm{swap rate} $\SX{x,\ammR[0],\ammR[1]}$
+determines the amount of \emph{output tokens} $\tokT[1]$
+that a user receives upon an amount of $x$ \emph{input tokens} $\tokT[0]$ 
+in an AMM \mbox{$\amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}$}.
+\[
+\irule
+{
+  \begin{array}{l}
+    \tokBal{\tokT[0]} \geq x
+    \qquad
+    y = x \cdot \SX{x,\ammR[0],\ammR[1]} < \ammR[1]
+  \end{array}
+}
+{\begin{array}{l}
+   \walA{\tokBal}
+   \mid
+   \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}
+   \mid
+   \confG
+   \xrightarrow{\actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}}
+   \\[4pt]
+   \walA{\tokBal - x:\tokT[0] + y:\tokT[1]}
+   \mid
+   \amm{\ammR[0]+ x:\tokT[0]}{\ammR[1]-y:\tokT[1]}
+   \mid
+   \confG
+   \hspace{-5pt}
+ \end{array}
+}
+\nrule{[Swap]}
+\]
+
+In this paper, we use \albnote{detta così sembra che tutto quello che segue è specifico per la constant product, ma sempre il caso? Explicitamente, lo `constant product' viene menzionato soltanto nel Lemma 2.11 e nel teorem 2.12. Poi ci sono tante lemmi/teoremi che usano la definizione specifica di SX come constant product. Una pulitina per rendere il tutto più chiaro e consistente basta :)} a specific swap rate function,
+named \keyterm{constant product swap rate}.
+This is used in mainstream AMM implementations,
+like \eg in Uniswap v2~\cite{uniswapimpl}, 
+Mooniswap~\cite{mooniswapimpl} and SushiSwap~\cite{sushiswapimpl}.
+
+\albnote{Potrebbe essere utile indicare/menzionare le diff con il paper LMCS. }
+
+\begin{defi}{Constant product swap rate}{const-prod}
+  The constant product swap rate function is:  
+  \[
+    \SX{x,\ammR[0],\ammR[1]}
+    \; = \;
+    \frac{\fee \, \ammR[1]}{\ammR[0] + \fee \, x}
+    \qquad\text{where } 
+    \fee \in [0,1] 
+  \]
+\end{defi}
+
+\albnote{$(0,1])$? Cioè, escludere 0?}
+
+% \albnote{Altro: nota doppio pedice $\phi_\phi$ sopra.}
+% \bartnote{risolto}
+
+\bartnote{spiegare meglio}
+This rules involves a \emph{trading fee} $1 - \fee$.
+When the trading fee is zero (\ie, $\fee = 1$), 
+the swap rate preserves the product between AMM reserves;
+a higher fee, instead, results in reduced amounts of output tokens
+received from swap actions.
+Intuitively, the AMM retains a portion of the swapped amounts, 
+but the overall reserves are still distributed among all minted tokens, 
+thereby increasing the redeem rate of minted tokens.
+
+\bartnote{rivedere} \albnote{$\phi$ sparita? :)}
+\bartnote{è sparita perché questo commento l'ho copiato da LMCS. Ci va aggiunta}
+The constant product swap rate ensures that,
+if an AMM $\amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]}$ evolves into
+$\amm{\ammR[0]+x:\tokT[0]}{\ammR[1]-y:\tokT[1]}$ upon a swap, 
+then the product between the reserves is preserved:
+\[
+(\ammR[0]+x) (\ammR[1]-y)
+\; = \;
+(\ammR[0]+x) \Big( \ammR[1]-x \cdot \frac{\ammR[1]}{\ammR[0] + x} \Big)
+\; = \;
+\ammR[0] \ammR[1]
+\]
+
+\mypar{Net worth and gain}
+
+% The incentive for users to participate in AMMs is to increase
+The \keyterm{net worth} of a user $\pmvA$ is a measure of $\pmvA$'s 
+wealth in tokens (both atomic and minted). 
+Formally, we define the net worth of $\pmvA$ in a state $\confG$ as:
+\begin{equation} 
+  \label{eq:net-worth:user}
+  W_{\pmvA}(\confG) \; = \; \begin{cases}
+    \sum_{\tokT \in \dom{\tokBal}}
+    \tokBal{\tokT} \cdot \exchO[\confG]{\tokT}
+  & \text{if $\walA{\tokBal} \in \confG$} 
+  \\[4pt]
+  0 & \text{otherwise}
+  \end{cases}
+\end{equation}
+
+We denote by $\gain[\confG]{\pmvA}{\bcB}$ the \keyterm{gain} of user $\pmvA$
+upon performing a sequence of transactions $\bcB$ enabled in state $\confG$
+(if $\bcB$ is not enabled in $\confG$, we stipulate that the gain is zero):
+\begin{equation}
+  \label{def:gain:A}
+  \gain[\confG]{\pmvA}{\bcB}
+  \; = \;
+  W_{\pmvA}(\confGi) -W_{\pmvA}(\confG)
+  \qquad \text{if $\confG \xrightarrow{\bcB} \confGi$}
+\end{equation}
+
+\marconote{aggiungere definizioni di internal exchange rate e external}

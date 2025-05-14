@@ -1,0 +1,70 @@
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+
+\usepackage{xspace} % Smart spaces after commands
+
+\definecolor{BlueViolet}{rgb}{0, 0, 0.55}
+\definecolor{RubineRed}{rgb}{0.88, 0.07, 0.37}
+\definecolor{ForestGreen}{rgb}{0.13, 0.55, 0.13}
+\definecolor{Blue}{rgb}{0.0, 0.0, 1.0}
+\definecolor{NavyBlue}{rgb}{0.0, 0.0, 0.5}
+\definecolor{Black}{rgb}{0.02, 0.02, 0.02}
+\definecolor{MidnightBlue}{rgb}{0.0, 0.2, 0.4}
+\definecolor{Gray}{rgb}{0.41, 0.41, 0.41}
+\definecolor{TealBlue}{rgb}{0.212,0.459,0.533}
+\definecolor{Plum}{rgb}{0.6,0.25,0.6}
+
+\usepackage{bm} % for bold symbols
+% bart: removed for MikTex compatibility
+%\usepackage{mathbbol} % for bb-style greek letters
+
+\usepackage{amssymb}
+% \usepackage{stmaryrd} % for llbracket and rrbracket\textbf{\textbf{}}
+\usepackage{graphicx}
+
+\usepackage{mathtools}
+\usepackage{url}
+
+\usepackage{etoolbox}
+
+
+\usepackage[inline,shortlabels]{enumitem} 
+\newlist{inlinelist}{enumerate*}{1}
+\setlist*[inlinelist,1]{%
+  label=(\roman*),
+}
+\usepackage{xifthen}  % Extended conditional commands
+\usepackage{ifthen}
+
+\usepackage{nicefrac}
+
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+\hypersetup{
+  breaklinks   = true,
+  colorlinks   = true, %Colours links instead of ugly boxes
+  urlcolor     = blue, %Colour for external hyperlinks
+  linkcolor    = blue, %Colour of internal links
+  citecolor    = red   %Colour of citations
+}
+\hypersetup{final} % Needed to generate hyperlinks even in draft mode (ERROR IN MAC)
+
+% draft -> final to remove notes
+\usepackage[draft,nomargin,inline,index]{fixme} % Simplified management of FIXME's
+\fxusetheme{color}
+
+\definecolor{Black}{HTML}{000000}
+\definecolor{Gray}{HTML}{808080}
+\definecolor{Magenta}{HTML}{FF00FF}
+\definecolor{RubineRed}{HTML}{ED017D}
+% \definecolor{ForestGreen}{HTML}{009B55}
+% \definecolor{ForestGreen}{HTML}{548F66}
+\definecolor{ForestGreen}{HTML}{028A0F}
+\definecolor{OliveGreen}{HTML}{808000}
+\definecolor{MidnightBlue}{HTML}{006795}
+\definecolor{Plum}{HTML}{92268F}
+
+\FXRegisterAuthor{bart}{anbart}{\color{magenta} {\underline{bart}}}
+\FXRegisterAuthor{marco}{anmarco}{\color{red} {\underline{marco}}}
+\FXRegisterAuthor{alb}{analberto}{\color{blue} {\underline{alberto}}}

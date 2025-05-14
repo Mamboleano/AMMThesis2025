@@ -1,0 +1,17 @@
+\chapter{Introduction}
+
+Decentralized Finance (DeFi) has transformed the financial landscape by enabling peer-to-peer transactions without a central intermediary. One of the core mechanisms of many DeFi applications is the Automated Market Makers (AMMs), which enable token swaps through algorithmic pricing mechanisms. Among the various kinds of AMMs, the Constant Product Market Makers (CPMMs) are the most used ones, with implementations such as Uniswap v2/v3 \cite{uniswapv2} \cite{uniswapv3}, Sushiswap \cite{sushiswapimpl}, et cetera. To better understand the importance of these implementations, as of May 2025, Uniswap stands out with an approximate Total Value Locked (TVL) of \$5 billion \cite{mottaghi2025tvl}. 
+
+While AMMs have been extensively studied, the role of trading fees - which is critical in the real-world implementations of AMMs - has often gone under-looked in formal analyses of AMMs models. Trading fees play a crucial role on incentivizing liquidity provision, but also on influencing user strategies and the overall market dynamics. A formal approach and understanding of how fees impact AMM behavior is essential for both theoretical and practical applications. 
+
+This thesis aims to extend the already existing models \cite{BCL22lmcs} and formalization \cite{PB24arxiv} addressing this gap by providing a formal analysis of AMMs incorporating trading fees. With the use of Lean 4 \cite{deMoura2021lean4} we extend the existing formalization of AMMs to include the fee mechanisms for token swaps. This work builds on foundational formalizations, enriching them to model economic properties introduced - or altered - by trading fees. 
+
+\citeLean{}
+
+In the following sections of this work, we present numerous definitions and lemmas, each accompanied by their respective implementations in Lean 4. To help the reader navigate between the theoretical content of this work and the practical implementation, we use integrated interactive buttons \cite{citelean2025} adjacent to each definition and lemma. Clicking these buttons will redirect the reader to the corresponding entries in the project's documentation, providing access to the formal Lean 4 implementation. For a full overview of the documentation, the docs index can be accessed by clicking the button on the left.
+
+\input{Chapters/01_Introduction/01_Contributions}
+
+\input{Chapters/01_Introduction/02_Related_Work}
+
+\input{Chapters/01_Introduction/03_AMM_Model}

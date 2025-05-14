@@ -1,0 +1,1244 @@
+\chapter{Proofs}
+
+
+\begin{proofof}{Lemma}{lem:fee:swap:gain}
+    Proof is the same as in~\cite{BCL22lmcs}.
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:fee:swap:gain-SX-X-fee}
+    Proof is the same as in~\cite{BCL22lmcs}.
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:fee:additive:zeta-reduced}
+    \begin{align*}
+        \Z x y {r_0} {r_1} & =
+        \frac
+            {\Big ( (\fee \ammR[1] x)(\ammR[0] + \fee x + \fee y) + (\fee \ammR[1] \ammR[0] y)\Big ) \cdot (\ammR[0] + x + \fee y)}
+            {(\ammR[0] + \fee x + \fee y) \cdot \Big ( (\fee \ammR[1] x)(\ammR[0] + x + \fee y) + (\fee \ammR[1] \ammR[0] y)\Big )}
+        \\
+        & = 
+        \frac
+            {\Big ( \fee \ammR[0] \ammR[1] x + \fee ^ 2 \ammR[1] x^2 + \fee^2 \ammR[1] x y + \fee \ammR[0] \ammR[1] y\Big ) \cdot (\ammR[0] + x + \fee y)}
+            {(\ammR[0] + \fee x + \fee y) \cdot \Big ( \fee \ammR[0] \ammR[1] x + \fee \ammR[1] x^2 + \fee^2 \ammR[1] x y + \fee \ammR[0] \ammR[1] y \Big )}
+        \\
+        & = 
+        \frac
+            {\Big ( \fee \ammR[1] x (\ammR[0] + \fee x) + \fee \ammR[1] y (\ammR[0] + \fee x)\Big ) \cdot (\ammR[0] + x + \fee y)}
+            {(\ammR[0] + \fee x + \fee y) \cdot \Big ( \fee \ammR[1] (\ammR[0] x + x^2 + \fee x y + \ammR[0] y) \Big )}
+        \\
+        & = 
+        \frac
+            {\fee \ammR[1] \Big ( x (\ammR[0] + \fee x) + y (\ammR[0] + \fee x)\Big ) \cdot (\ammR[0] + x + \fee y)}
+            {\fee \ammR[1] (\ammR[0] + \fee x + \fee y) (\ammR[0] x + x^2 + \fee x y + \ammR[0] y)}
+        \\
+        & = 
+        \frac
+        {(x + y)(\ammR[0] + \fee x)(\ammR[0] + x + \fee y)}
+        {(\ammR[0] + \fee x + \fee y)(x^2 + \ammR[0] x +\fee x y + \ammR[0] y)} 
+    \end{align*}
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:fee:additive:zeta-gt-one}
+    Assume that $\phi < 1$, then: 
+    \begin{align*}
+        & \Z x y {r_0} {r_1} > 1 
+        \\
+        \iff & 
+        \Z x y {r_0} {r_1} - 1 > 0
+        \\
+        \iff & 
+        \frac
+        {(x + y)(\ammR[0] + \fee x)(\ammR[0] + x + \fee y)}
+        {(\ammR[0] + \fee x + \fee y)(x^2 + \ammR[0] x +\fee x y + \ammR[0] y)} 
+        - 1 > 0 && \quad \text{By~\ref{lem:fee:additive:zeta-reduced}}
+        \\
+        \iff & 
+        (x + y)(\ammR[0] + \fee x)(\ammR[0] + x + \fee y) 
+        \\ & 
+        - (\ammR[0] + \fee x + \fee y)(x^2 + \ammR[0] x +\fee x y + \ammR[0] y) > 0
+        && \quad  \text{Denum > 0}
+        \\
+        \iff & 
+        \ammR[0] x y + x(\ammR[0] + \fee x)(\ammR[0] + x + \fee y) + \ammR[0] y (\ammR[0] + \fee y) + \fee x y(\ammR[0] + x + \fee y) 
+        \\ & 
+        - \fee \ammR[0] x y - \fee x (x^2 + \ammR[0] x + \fee x y) - (\ammR[0] + \fee y) (x^2 + \ammR[0] x + \fee x y + \ammR[0] y)
+        \\ & > 0
+        \\
+        \iff & 
+        \ammR[0] x y (1 - \fee) + (\ammR[0] + \fee x)(x^2 + \ammR[0] x + \fee x y) + \fee y (x^2 + \ammR[0] x + \fee x y)
+        \\ & 
+        + \ammR[0] y (\ammR[0] + \fee y) - \fee x (x^2 + \ammR[0] x + \fee x y) - \ammR[0] y (\ammR[0] + \fee y) 
+        \\ & 
+        - (\ammR[0] + \fee y)(x^2 + \ammR[0] x + \fee x y) > 0
+        \\ 
+        \iff &
+        \ammR[0] x y (1 - \fee) + (\ammR[0] + \fee x)(x^2 + \ammR[0] x + \fee x y) + \fee y (x^2 + \ammR[0] x + \fee x y)
+        \\  & 
+        - \fee x (x^2 + \ammR[0] x + \fee x y) - (\ammR[0] + \fee y)(x^2 + \ammR[0] x + \fee x y) > 0
+        \\
+        \iff & 
+        \ammR[0] x y (1 - \fee) + (x^2 + \ammR[0] x + \fee x y)(\ammR[0] + \fee x + \fee y - \fee x - \ammR[0] - \fee y) > 0
+        \\
+        \iff & 
+        \ammR[0] x y (1 - \fee) > 0
+        \\ 
+        \iff & (1 - \fee) > 0
+        \\
+        \iff & 
+        \fee < 1
+    \end{align*}
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:fee:swap-gain:additive}
+By Definition~\ref{defi:fee:sr-additivity} we have that
+    \begin{align*}
+        \valSXc = \SX{x_0+x_1, \ammR[0], \ammR[1]} = 
+        \frac{\valSXa x_0 + \valSXa x_1}{x_0 + x_1} \cdot z
+    \end{align*}
+    So, 
+    \begin{align*}
+        & \gain[\confG]{\pmvA}{\txT(x_0 + x_1)} - \gain[\confG]{\pmvA}{\txT(x_0)}
+        \\
+        & = \valSXc (x_0 + x_1)\exchO{\tokT[1]} - (x_0 + x_1) \exchO{\tokT[0]} 
+          - \valSXa x_0 \exchO{\tokT[1]} + x_0 \exchO{\tokT[0]}
+        \\
+        & = (\valSXc (x_0 + x_1) - \valSXa x_0) \exchO{\tokT[1]} - x_1 \exchO{\tokT[0]}
+        \\
+        & = (z \valSXa x_0 + z \valSXb x_1 - \valSXa x_0) \exchO{\tokT[1]} - x_1 \exchO{\tokT[0]}
+        \\
+        & = z \valSXa x_0 \exchO{\tokT[1]} + z \valSXb x_1 \exchO{\tokT[1]} - \valSXa x_0 \exchO{\tokT[1]} - x_1 \exchO{\tokT[0]}
+        \\
+        & = z \valSXa x_0 \exchO{\tokT[1]} + z \valSXb x_1 \exchO{\tokT[1]} - \valSXa x_0 \exchO{\tokT[1]} - x_1 \exchO{\tokT[0]} + \valSXb x_1 \exchO{\tokT[1]} - \valSXb x_1 \exchO{\tokT[1]}
+        \\
+        & = (\valSXb x_1 \exchO{\tokT[1]} - x_1 \exchO{\tokT[0]}) + (z \valSXa x_0 \exchO{\tokT[1]} + z \valSXb x_1 \exchO{\tokT[1]} - \valSXa x_0 \exchO{\tokT[1]} - \valSXb x_1 \exchO{\tokT[0]})
+        \\
+        & = \gain[\confGi]{\pmvA}{\txT(x_1)} + \exchO{\tokT[1]}(z-1)(\valSXa x_0 + \valSXb x_1) && (\text{by Def.~\ref{lem:fee:swap:gain}})
+        \\
+        & = \gain[\confGi]{\pmvA}{\txT(x_1)} + \epsilon_{\fee} && (\text{by Def. of $\epsilon_{\fee}$})
+    \end{align*}
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:fee:constprod:output-bound}
+    \begin{align*}
+        & x \cdot \SX{x,\ammR[0],\ammR[1]} < \ammR[1]
+        \\
+        \iff & 
+        x \cdot \frac{\fee \ammR[1]}{\ammR[0] + \fee  x} < \ammR[1]
+        \\
+        \iff & 
+        x \fee \ammR[1] < \ammR[1] + (\ammR[0] + \fee x)
+        \\
+        \iff & 
+        \fee x \ammR[1] < \ammR[0] \ammR[1] + \fee x \ammR[1]
+        \\
+        \iff & 
+        \ammR[0] \ammR[1] > 0
+        \\
+        \iff & True
+    \end{align*}
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:fee:constprod:strict-mono}
+    There are two possible cases either $x' < x \lor r_0' < r_0 \lor r_1 < r_1'$ or not. in both cases, it is always true that $x' \leq x \land r_0' \leq r_0 \land r_1 \leq r_1'$
+
+    \begin{enumerate}
+        \item $\neg (x' < x \lor r_0' < r_0 \lor r_1 < r_1')$ : \\
+        In this case we want to prove: 
+        \begin{align*}
+            & \SX{x, r_0, r_1} \leq \SX{x', r_0', r_1'}
+            \\ \iff & 
+            \frac{\fee \ammR[1]}{\ammR[0] + \fee x} \leq \frac{\fee \ammR[1]'}{\ammR[0]' + \fee x'}
+            \\ \iff & 
+            \fee \ammR[1] (\ammR[0]' + \fee x') \leq \fee \ammR[1]' (\ammR[0] + \fee x)
+        \end{align*}
+        This is true iff 
+        \begin{align*}
+            \fee \ammR[1] \leq \fee \ammR[1]'\iff
+            \ammR[1] \leq \ammR[1]' \quad \text{By assm.}
+        \end{align*}
+        and 
+        \begin{align*}
+            & \ammR[0]' + \fee x' \leq \ammR[0] + \fee x
+            \\ \iff & \Big ( 
+            (\ammR[0]' \leq \ammR[0]) \land (\fee x' \leq \fee x) \Big ) \quad && \text{By assm.}
+            \\ \iff & x' \leq x \quad && \text{By assm.}
+        \end{align*}
+
+        \item $x' < x \lor r_0' < r_0 \lor r_1 < r_1'$: \\
+        In this case we have three different cases: 
+        \begin{enumerate}
+            \item Case $x' < x$: \\
+            \begin{align*}
+                & \SX{x, r_0, r_1} < \SX{x', r_0', r_1'}
+                \\ \iff & 
+                \frac{\fee \ammR[1]}{\ammR[0] + \fee x} < \frac{\fee \ammR[1]'}{\ammR[0]' + \fee x'}
+                \\ \iff & 
+                \fee \ammR[1] (\ammR[0]' + \fee x') < \fee \ammR[1]' (\ammR[0] + \fee x)
+            \end{align*}
+            Since we know that $\fee \ammR[1] \leq \fee \ammR[1]'$ and $\ammR[0]' + \fee x' < \ammR[0] + \fee x$ by assumptions, then the proof is finished. 
+            \item Case $\ammR[0]' < \ammR[0]$: \\
+            \begin{align*}
+                & \SX{x, r_0, r_1} < \SX{x', r_0', r_1'}
+                \\ \iff & 
+                \frac{\fee \ammR[1]}{\ammR[0] + \fee x} < \frac{\fee \ammR[1]'}{\ammR[0]' + \fee x'}
+                \\ \iff & 
+                \fee \ammR[1] (\ammR[0]' + \fee x') < \fee \ammR[1]' (\ammR[0] + \fee x)
+            \end{align*}
+            Since we know that $\fee \ammR[1] \leq \fee \ammR[1]'$ and $\ammR[0]' + \fee x' < \ammR[0] + \fee x$ by assumptions, then the proof is finished. 
+            \item Case $\ammR[1] < \ammR[1]'$: \\
+            \begin{align*}
+                & \SX{x, r_0, r_1} < \SX{x', r_0', r_1'}
+                \\ \iff & 
+                \frac{\fee \ammR[1]}{\ammR[0] + \fee x} < \frac{\fee \ammR[1]'}{\ammR[0]' + \fee x'}
+                \\ \iff & 
+                \fee \ammR[1] (\ammR[0]' + \fee x') < \fee \ammR[1]' (\ammR[0] + \fee x)
+            \end{align*}
+            Since we know that $\fee \ammR[1] < \fee \ammR[1]'$ and $\ammR[0]' + \fee x' \leq \ammR[0] + \fee x$ by assumptions, then the proof is finished.
+        \end{enumerate}
+    \end{enumerate}
+\end{proofof}
+
+
+\begin{proofof}{Lemma}{lem:fee:constprod:additivity}
+    Let 
+    \begin{align*}
+        \valSXa & = \SX{x, \ammR[0], \ammR[1]} = \frac{\fee \ammR[1]}
+                                                    {\ammR[0] + \fee x}
+        \\
+        \valSXb & = \SX{y, \ammR[0] + x, \ammR[1] - \valSXa x} = 
+        \frac
+            {\fee (\ammR[1] - \valSXa x)}
+            {\ammR[0] + x + \fee y}
+        = \frac 
+            {\fee \cdot \Big ( \ammR[1] - \frac{\fee \ammR[1] x}{\ammR[0] + \fee x}\Big )}
+            {\ammR[0] + x + \fee y}    
+         = \frac 
+            {\fee \Big ( \frac{\ammR[1](\ammR[0] + \fee x) -   \fee \ammR[1] x}{\ammR[0] + \fee x}\Big )}
+            {\ammR[0] + x + \fee y}
+        \\
+        & = \frac{\fee (\ammR[1] \ammR[0] + \fee \ammR[1] x - \fee \ammR[1] x)}
+                 {(\ammR[0] + \fee x)(\ammR[0] + x + \fee y)}
+          = \frac{\fee \ammR[1] \ammR[0]}
+                 {(\ammR[0] + \fee x)(\ammR[0] + x + \fee y)} 
+    \end{align*}
+
+    Then, 
+    \begin{align*}
+        \frac{\valSXa x + \valSXb y}{x+y} \cdot z 
+        & = 
+        \frac{1}{x + y} \Big ( 
+            \frac{\fee \ammR[1] x}{\ammR[0] + \fee x} + 
+            \frac{\fee \ammR[1] \ammR[0] y}{(\ammR[0] + \fee x)(\ammR[0] + x +\fee y)}
+        \Big ) \cdot z
+        \\
+        & = 
+        \frac{1}{x + y} \Big (
+            \frac
+                {\fee \ammR[0] \ammR[1] x + \fee \ammR[1] x^2 + \fee^2 \ammR[1] x y + \fee \ammR[0] \ammR[1] y}
+                {(\ammR[0] + \fee x)(\ammR[0] + x +\fee y)}
+        \Big ) \cdot z
+        \\
+        & = 
+        \frac{1}{x + y} \Big (
+            \frac
+                {(\fee \ammR[1] x)(\ammR[0] + x + \fee y) + (\fee \ammR[1] \ammR[0] y)}
+                {(\ammR[0] + \fee x)(\ammR[0] + x +\fee y)}
+        \Big ) \cdot 
+        \\
+        & \frac
+            {\Big ( (\fee \ammR[1] x)(\ammR[0] + \fee x + \fee y) + (\fee \ammR[1] \ammR[0] y)\Big ) \cdot (\ammR[0] + x + \fee y)}
+            {(\ammR[0] + \fee x + \fee y) \cdot \Big ( (\fee \ammR[1] x)(\ammR[0] + x + \fee y) + (\fee \ammR[1] \ammR[0] y)\Big )}
+        \\
+        & = 
+        \frac{1}{x + y}
+            \frac
+                {(\fee \ammR[1] x)(\ammR[0] + \fee x + \fee y) + (\fee \ammR[1] \ammR[0] y)}
+                {(\ammR[0] + \fee x)(\ammR[0] + \fee x +\fee y)}
+        \\        
+        & = 
+        \frac{1}{x + y}
+            \frac
+                {\fee \ammR[0] \ammR[1] x + \fee^2 \ammR[1] x^2 + \fee^2 \ammR[1] x y + \fee \ammR[1] \ammR[0] y}
+                {(\ammR[0] + \fee x)(\ammR[0] + \fee x +\fee y)}
+        \\        
+        & = 
+        \frac{1}{x + y}
+            \frac
+                {\fee \ammR[1] (\ammR[0] x + \fee x^2 + \fee x y + \ammR[0] y)}
+                {(\ammR[0] + \fee x)(\ammR[0] + \fee x +\fee y)}
+        \\        
+        & = 
+        \frac{1}{x + y}
+            \frac
+                {\fee \ammR[1] (\ammR[0] + \fee x)(x + y)}
+                {(\ammR[0] + \fee x)(\ammR[0] + \fee x +\fee y)}
+        \\        
+        & = 
+        \frac{\fee \ammR[1]}{\ammR[0] + \fee (x + y)}
+        \\
+        & = 
+        \SX{x+y, \ammR[0], \ammR[1]}
+    \end{align*}
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:fee:sx-rate-vs-int-rate}
+    We split the proof in two parts: 
+    \begin{itemize}
+        \item $\SX{x_0, \ammR[0], \ammR[1]} < \X[\Gamma]{\tokT[0],\tokT[1]}$: 
+        \begin{align*}
+            \X[\confG]{\tokT[0],\tokT[1]} 
+                & = \lim_{z \rightarrow 0} \SX{z,\ammR[0],\ammR[1]} && \text{(by Def. of X)}
+                \\
+                & > \SX{x_0, \ammR[0], \ammR[1]}                    && \text{Strict. Mono.}
+        \end{align*}
+
+        \item $\X[\confGi]{\tokT[0],\tokT[1]} < \SX{x_0, \ammR[0], \ammR[1]}$:
+
+            Let $\valSXa = \SX{x_0, \ammR[0], \ammR[1]}$. 
+            
+            Before continuing the proof, lets first prove that
+                \begin{equation}
+                    \label{eq:SX-less-SX-fee}
+                    \frac{\fee(\ammR[1] - \valSXa x_0)}{\ammR[0] + x_0} < \frac{\fee \ammR[1]}{\ammR[0] + \fee x_0}
+                \end{equation}
+                \begin{proof}
+                    \begin{align*}
+                        & \frac{\fee(\ammR[1] - \valSXa x_0)}{\ammR[0] + x_0} < \frac{\fee 
+                          \ammR[1]}{\ammR[0] + \fee x_0}
+                        \\
+                        \iff & 
+                        \fee (\ammR[1] - \valSXa x_0)(\ammR[0] + \fee x_0) < \fee \ammR[1] (\ammR[0] + x_0)
+                        \\
+                        \iff & 
+                        \fee \ammR[1](\ammR[0] + \fee x_0) - \fee \valSXa x_0 (\ammR[0] + \fee x_0) - \fee \ammR[1] (\ammR[0] + \fee x_0) < 0
+                        \\
+                        \iff & 
+                        \fee \ammR[1] (\fee x_0 - x_0) - \fee \valSXa x_0 (\ammR[0] + \fee x_0) < 0
+                        \\
+                        \iff & 
+                        \fee \ammR[1] x_0 (\fee - 1) - \fee \valSXa x_0 (\ammR[0] + \fee x_0) < 0
+                    \end{align*}
+
+                    Since we know that $\fee \valSXa x_0 (\ammR[0] + \fee x_0) > 0$ because all the terms are strictly positive, and $\fee \ammR[1] x_0 (\fee - 1) \leq 0 \iff \fee \leq 1$, then we finish the proof. 
+                \end{proof}
+                Now we can continue the proof:
+                \begin{align*}
+                    \X[\confGi]{\tokT[0],\tokT[1]} 
+                    & = 
+                    \lim_{z \rightarrow 0} \SX{z,\ammR[0] + x_0,\ammR[1] - \valSXa x_0} && \text{(by Def. of X)}
+                    \\
+                    & =
+                    \frac{\fee(\ammR[1] - \alpha x_0)}{\ammR[0] + x_0}
+                    \\
+                    & < 
+                    \frac{\fee \ammR[1]}{\ammR[0] + x_0} && \text{by Eq~\ref{eq:SX-less-SX-fee}}
+                    \\
+                    & = 
+                    \SX{x_0, \ammR[0], \ammR[1]}
+                \end{align*}
+    \end{itemize}
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:fee:split-int-vs-ext-rate}
+    Consider
+    \begin{align*}
+        y_1 & = \SX{x_1, \ammR[0], \ammR[1]} \cdot x_1 
+        \\  & = \frac{\fee \ammR[1] x_1}{\ammR[0] + \fee x_1}
+        \\
+        y_2 & = \SX{x_2, \ammR[0] + x_1, \ammR[1] - y_1} \cdot x_2
+        \\  & = \frac{\fee \ammR[0] \ammR[1] x_2}{(\ammR[0] + \fee x_1)(\ammR[0] + x_1 + \fee x_2)}
+        \\
+        y_3 & = \SX{x1 + x_2, \ammR[0] + x_1 + x_2, \ammR[1] - (y_1 + y_2)} \cdot (x_1 + x_2)
+        \\  & = \SX{x_0, \ammR[0] + x_0, \ammR[1] - (y_1 + y_2)} \cdot x_0 
+        \\  & = \frac{\fee \ammR[1] (x_1 + x_2)}{\ammR[0] + \fee x_1 + \fee x_2}
+    \end{align*}
+
+    Then, 
+    \begin{align*}
+        \X[{\confG[2]}]{\tokT[0],\tokT[1]} & = 
+        \lim_{z \rightarrow 0} \SX{z,\ammR[0] + x_0,\ammR[1] - (y_1 + y_2)}
+        && (\text{By Def.})
+        \\
+        & > \lim_{z \rightarrow 0} \SX{z,\ammR[0] + x_0,\ammR[1] - y_3}
+        && (\text{By strict mono. proof below})
+        \\
+        & = \X[\confGi]{\tokT[0],\tokT[1]} = \X{\tokT[0],\tokT[1]}
+        && (\text{By. Def. and Hyp.})
+    \end{align*}
+
+    We know that $z \leq z$ and $\ammR[0] + x_0 \leq \ammR[0] + x_0$, hence we only have to prove that $\ammR[1] - (y_1 + y_2) > \ammR[1] - y_3$:
+    \begin{align*}
+        & \ammR[1] - (y_1 + y_2) > \ammR[1] - y_3
+        \\
+        \iff & y_1 + y_2 - y_3 < 0
+        \\
+        \iff & \frac{\fee \ammR[1] x_1}{\ammR[0] + \fee x_1} + \frac{\fee \ammR[0] \ammR[1] x_2}{(\ammR[0] + \fee x_1)(\ammR[0] + x_1 + \fee x_2)}
+        - \frac{\fee \ammR[1] (x_1 + x_2)}{\ammR[0] + \fee x_1 + \fee x_2} < 0
+        \\
+        \iff & \frac
+            {\fee \ammR[1] x_1 (\ammR[0] + x_1 + \fee x_2)(\ammR[0] + \fee x_1 + \fee x_2) + \fee \ammR[0] \ammR[1] x_2 (\ammR[0] + \fee x_1 + \fee x_2)}
+            {(\ammR[0] + \fee x_1)(\ammR[0] + x_1 + \fee x_2)(\ammR[0] + \fee x_1 + \fee x_2)}
+            \\
+            - & \frac{\fee \ammR[1] x_1 (\ammR[0] + \fee x_1)(\ammR[0] + x_1 + \fee x_2) + \fee \ammR[1] x_2 (\ammR[0] + \fee x_1)(\ammR[0] + x_1 + \fee x_2)}
+            {(\ammR[0] + \fee x_1)(\ammR[0] + x_1 + \fee x_2)(\ammR[0] + \fee x_1 + \fee x_2)} < 0
+        \\
+        \iff & 
+            \fee \ammR[1] x_1 (\ammR[0] + x_1 + \fee x_2)(\ammR[0] + \fee x_1 + \fee x_2) + \fee \ammR[0] \ammR[1] x_2 (\ammR[0] + \fee x_1 + \fee x_2) 
+            \\
+            - & \fee \ammR[1] x_1 (\ammR[0] + \fee x_1)(\ammR[0] + x_1 + \fee x_2) - \fee \ammR[1] x_2 (\ammR[0] + \fee x_1)(\ammR[0] + x_1 + \fee x_2) < 0
+        \\
+        \iff & 
+            \fee \ammR[1] x_1 (\ammR[0] + x_1 + \fee x_2)((\ammR[0] + \fee x_1 + \fee x_2) - (\ammR[0] + \fee x_1)) + \fee \ammR[0] \ammR[1] x_2 (\ammR[0] + \fee x_2)
+            \\
+            + & \fee^2 \ammR[0] \ammR[1] x_1 x_2 - \fee \ammR[0] \ammR[1] x_1 x_2 - \fee \ammR[0] \ammR[1] x_2 (\ammR[0] + \fee x_2) - \fee^2 \ammR[1] x_1 x_2 (\ammR[0] + x_1 + \fee x_2) < 0
+        \\
+        \iff & 
+            \fee^2 \ammR[1] x_1 x_2 (\ammR[0] + x_1 + \fee x_2) + \fee \ammR[0] \ammR[1] x_2 (\ammR[1] + \fee x_2) + \fee^2 \ammR[0] \ammR[1] x_1 x_2 - \fee \ammR[0] \ammR[1] x_1 x_2
+            \\
+            - & \fee \ammR[0] \ammR[1] x_2 (\ammR[0] + \fee x_2) - \fee^2 \ammR[1] x_1 x_2 (\ammR[0] + x_1 + \fee x_2) < 0
+        \\
+        \iff & 
+            \fee^2 \ammR[0] \ammR[1] x_1 x_2 - \fee \ammR[0] \ammR[1] x_1 x_2 < 0
+        \\
+        \iff & 
+            \fee \ammR[0] \ammR[1] x_1 x_2 (\fee - 1) < 0
+        \\
+        \iff &
+            \fee - 1 < 0 
+        \\
+        \iff & \fee < 1
+    \end{align*}
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:arbitrage:balance}
+    Before starting the proof, we rewrite some terms: 
+    \begin{align*}
+        x_0 + \ammR[0] & = 
+        \frac
+        {-\sqrt{\exchO{\tokT[0]}} \ammR[0] (1 + \fee) + \sqrt{\ammR[0]} \sqrt{\exchO{\tokT[0]} \ammR[0] (-1 + \fee)^2 + 4 \exchO{\tokT[1]} \ammR[1] \fee^2}}
+        {2 \sqrt{\exchO{\tokT[0]}} \fee} + \ammR[0]
+        \\
+        & = 
+        \frac
+        {-\sqrt{\exchO{\tokT[0]}} \ammR[0] (1 + \fee) + \sqrt{\ammR[0]} \sqrt{\exchO{\tokT[0]} \ammR[0] (-1 + \fee)^2 + 4 \exchO{\tokT[1]} \ammR[1] \fee^2} + 2 \sqrt{\exchO{\tokT[0]}} \fee \ammR[0]}
+        {2 \sqrt{\exchO{\tokT[0]}} \fee}
+        \\
+        & = 
+        \frac
+        {-\sqrt{\exchO{\tokT[0]}} \ammR[0] (1 - \fee) + \sqrt{\ammR[0]} \sqrt{\exchO{\tokT[0]} \ammR[0] (-1 + \fee)^2 + 4 \exchO{\tokT[1]} \ammR[1] \fee^2}}
+        {2 \sqrt{\exchO{\tokT[0]}} \fee}
+        \\
+        & = 
+        \frac
+        {\sqrt{\exchO{\tokT[0]}} \ammR[0] (\fee - 1) + \sqrt{\ammR[0]} \sqrt{\exchO{\tokT[0]} \ammR[0] (-1 + \fee)^2 + 4 \exchO{\tokT[1]} \ammR[1] \fee^2}} 
+        {2 \sqrt{\exchO{\tokT[0]}} \fee}
+        \numberthis \label{eq:x0-r0}
+        \\
+        \fee x_0 + \ammR[0] & = \fee \cdot
+        \frac
+        {-\sqrt{\exchO{\tokT[0]}} \ammR[0] (1 + \fee) + \sqrt{\ammR[0]} \sqrt{\exchO{\tokT[0]} \ammR[0] (-1 + \fee)^2 + 4 \exchO{\tokT[1]} \ammR[1] \fee^2}}
+        {2 \sqrt{\exchO{\tokT[0]}} \fee} + \ammR[0]
+        \\
+        & = \frac
+        {-\sqrt{\exchO{\tokT[0]}} \ammR[0] (1 + \fee) + \sqrt{\ammR[0]} \sqrt{\exchO{\tokT[0]} \ammR[0] (-1 + \fee)^2 + 4 \exchO{\tokT[1]} \ammR[1] \fee^2} + 2 \sqrt{\exchO{\tokT[0]}} \ammR[0]}
+        {2 \sqrt{\exchO{\tokT[0]}}}
+        \\
+        & = 
+        \frac
+        {-\sqrt{\exchO{\tokT[0]}} \ammR[0] (\fee - 1) + \sqrt{\ammR[0]} \sqrt{\exchO{\tokT[0]} \ammR[0] (-1 + \fee)^2 + 4 \exchO{\tokT[1]} \ammR[1] \fee^2}}
+        {2 \sqrt{\exchO{\tokT[0]}}} \numberthis \label{eq:fee-x0-r0}
+    \end{align*}
+    And let 
+    \begin{align*}
+        m & = \sqrt{\ammR[0]} \sqrt{\exchO{\tokT[0]} \ammR[0] (-1 + \fee)^2 + 4 \exchO{\tokT[1]} \ammR[1] \fee^2}
+        \\
+        \valSXa & = \SX{x_0, \ammR[0], \ammR[1]} = \frac{\fee \ammR[1]}{\ammR[0] + \fee x_0}
+    \end{align*}
+    Then, 
+    \begin{align*}
+        \X[\confGi]{\tokT[0], \tokT[1]} & = 
+        \lim_{z \rightarrow 0} \SX{z,\ammR[0] + x_0,\ammR[1] -\valSXa x_0}  && (\text{By Def.})
+        \\
+        & = \frac
+            {\fee (\ammR[1] - x_0 \cdot \frac
+                {\fee \ammR[1]}
+                {\ammR[0] + \fee x_0})}
+            {\ammR[0] + x_0}
+        \\
+        & = \frac
+            {\fee (\frac
+                {\ammR[0]\ammR[1] + \fee \ammR[1]x_0 - \fee \ammR[1] x_0}
+                {\ammR[0] + \fee x_0})}
+            {\ammR[0] + x_0}
+        \\
+        & = \frac
+            {\fee \ammR[0] \ammR[1]}
+            {(\ammR[0] + x_0) (\ammR[0] + \fee x_0)}
+        \\
+        & = \frac
+            {\fee \ammR[0] \ammR[1]}
+            {
+            (\frac
+            {\sqrt{\exchO{\tokT[0]}} \ammR[0] (\fee - 1) + m}
+            {2 \sqrt{\exchO{\tokT[0]}} \fee})
+            (\frac
+            {-\sqrt{\exchO{\tokT[0]}} \ammR[0] (\fee - 1) + m}
+            {2 \sqrt{\exchO{\tokT[0]}}})}   && (\text{By Subst.})
+        \\
+        & = \frac
+            {\fee \ammR[0] \ammR[1]}
+            {\frac
+                {(\sqrt{\exchO{\tokT[0]}} \ammR[0] (\fee - 1) + m)(-\sqrt{\exchO{\tokT[0]}} \ammR[0] (\fee - 1) + m)}
+                {4 \exchO{\tokT[0]} \fee}}
+        \\
+        & = \frac
+            {\fee \ammR[0] \ammR[1] (4 \exchO{\tokT[0]} \fee)}
+            {m^2 - (\sqrt{\exchO{\tokT[0]}} \ammR[0] (\fee - 1))^2}
+        \\
+        & = \frac
+            {\fee \ammR[0] \ammR[1] (4 \exchO{\tokT[0]} \fee)}
+            {\ammR[0] (\exchO{\tokT[0]} \ammR[0] (\fee - 1)^2 + 4 \exchO{\tokT[1]} \ammR[1] \fee ^2) - \exchO{\tokT[0]} \ammR[0]^2 (\fee - 1)^2}
+        \\
+        & = \frac
+            {\fee \ammR[0] \ammR[1] (4 \exchO{\tokT[0]} \fee)}
+            {\exchO{\tokT[0]} \ammR[0]^2 (\fee - 1)^2 + 4 \exchO{\tokT[1]} \ammR[0] \ammR[1] \fee ^2 - \exchO{\tokT[0]} \ammR[0]^2 (\fee - 1)^2}
+        \\
+        & = \frac
+            {\fee \ammR[0] \ammR[1] (4 \exchO{\tokT[0]} \fee)}
+            { 4 \exchO{\tokT[1]} \ammR[0] \ammR[1] \fee ^2 }
+        \\ & = 
+        \frac{\exchO{\tokT[0]}}{\exchO{\tokT[1]}}
+    \end{align*}
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:arbitrage:balance-unique}
+    
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:fee:equil-vs-gain}
+    \begin{itemize}
+        \item Case $x < x_0$: 
+
+            Let $x_1 > 0$ be such that $x_0 = x + x_1$. Since $\SX{}$ is output bounded, then $\txT(x_0)$, $\txT(x)$ and $\txT(x_1)$ are all enabled, in particular : 
+
+            \begin{align*}
+                & \confG \xrightarrow{\quad\quad\txT(x_0)\quad\quad} \confGi
+                \\
+                & \confG \xrightarrow{\txT(x)} \confG[1]\xrightarrow{\txT(x_1)} \confG[2]
+            \end{align*}
+
+            By Lemma ~\ref{lem:fee:swap-gain:additive} we know that: 
+
+            \[
+            \gain[\confG]{\pmvA}{\txT(x_0)} 
+            \; = \;
+            \gain[\confG]{\pmvA}{\txT(x)} + \gain[{\confG[1]}]{\pmvA}{\txT(x_1)} + \epsilon_{\fee}
+            \]
+
+            Since we know that $\epsilon_{\fee} > 0$ we just have to prove that $\gain[{\confG[1]}]{\pmvA}{\txT(x_1)} > 0$. To do that, we first prove that $\SX{x_1, \ammR[0] + x, \ammR[1] - \valSXa x} > \X{\tokT[0], \tokT[1]}$ where $\valSXa = \SX{x, \ammR[0], \ammR[1]}$: 
+            \begin{align*}
+                    \X{\tokT[0], \tokT[1]}
+                & < \X[{\confG[2]}]{\tokT[0], \tokT[1]} && \text{by ~\ref{lem:fee:split-int-vs-ext-rate}}
+                \\
+                & < \SX{x_1, \ammR[0] + x, \ammR[1] - \valSXa x}    && \text{by ~\ref{lem:fee:sx-rate-vs-int-rate}}
+            \end{align*}
+
+            So, by applying Lemma ~\ref{lem:fee:swap:gain-SX-X-fee} we can finish the proof.
+
+        \item Case $x > x_0$: 
+             Let $x_1 > 0$ be such that $x = x_0 + x_1$. Since $\SX{}$ is output bounded, then $\txT(x_0)$, $\txT(x)$ and $\txT(x_1)$ are all enabled, in particular : 
+
+            \begin{align*}
+                & \confG \xrightarrow{\quad\quad\txT(x)\quad\quad} \confG[1]
+                \\
+                & \confG \xrightarrow{\txT(x_0)} \confGi\xrightarrow{\txT(x_1)} \confG[2]
+            \end{align*}
+
+            By Lemma ~\ref{lem:fee:swap-gain:additive} we know that: 
+
+            \[
+            \gain[\confG]{\pmvA}{\txT(x)} 
+            \; = \;
+            \gain[\confG]{\pmvA}{\txT(x_0)} + \gain[{\confGi}]{\pmvA}{\txT(x_1)} + \epsilon_{\fee}
+            \]
+
+            To finish our proof, we need to prove that $\gain[{\confGi}]{\pmvA}{\txT(x_1)} + \epsilon_{\fee} < 0$. Since we know that $\epsilon_{\fee} > 0$, we have first to see if $\gain[{\confGi}]{\pmvA}{\txT(x_1)} < 0$, otherwise it is always false. So, we want to show that $\SX{x_1, \ammR[0] + x, \ammR[1] - \valSXa x} < \X{\tokT[0], \tokT[1]}$ where $\valSXa = \SX{x_0, \ammR[0], \ammR[1]}$: 
+                \begin{align*}
+                    \X{\tokT[0], \tokT[1]}
+                & = \X[{\confGi}]{\tokT[0], \tokT[1]}
+                \\
+                & < \SX{x_1, \ammR[0] + x_0, \ammR[1] - \valSXa x_0}    && \text{by ~\ref{lem:fee:sx-rate-vs-int-rate}}
+            \end{align*}
+
+            So, by applying Lemma ~\ref{lem:fee:swap:gain-SX-X-fee} we know that $\gain[{\confGi}]{\pmvA}{\txT(x_1)} < 0$, hence we can continue the proof.
+
+            \begin{proof}
+            
+                Before proceeding with the proof, we point out the values of some terms that we will be using during the proof: 
+
+                \begin{align*}
+                    x_1 \valSXb
+                    & = x_1 \cdot \frac
+                            {\fee \Big ( \ammR[1] - \frac
+                                {\fee \ammR[1]}
+                                {\ammR[0] + \fee x_0} \cdot x_0
+                            \Big )}
+                            {\ammR[0] + x_0 + \fee x_1 }
+                      = x_1 \cdot \frac
+                            {\fee \Big (\frac
+                                {\ammR[1] (\ammR[0] + \fee x_0) - \fee \ammR[1] x_0}
+                                {\ammR[0] + \fee x_0}
+                            \Big )}
+                            {\ammR[0] + x_0 + \fee x_1 }
+                    \\
+                    & = x_1 \cdot \frac
+                            {\fee \Big (\frac
+                                {\ammR[1] \ammR[0] + \fee \ammR[1] x_0 - \fee \ammR[1] x_0}
+                                {\ammR[0] + \fee x_0}
+                            \Big )}
+                            {\ammR[0] + x_0 + \fee x_1 }
+                     = \frac
+                            {\fee \ammR[0] \ammR[1] x_1}
+                            {(\ammR[0] + x_0 + \fee x_1) (\ammR[0] + \fee x_0)}
+                \\
+                \\
+                    (\valSXa x_0 + \valSXb x_1)
+                    & = 
+                    \frac{\fee \ammR[1] x_0}{\ammR[0] + \fee x_0} 
+                    + 
+                    \frac
+                        {\fee \ammR[0] \ammR[1] x_1}
+                        {(\ammR[0] + x_0 + \fee x_1) (\ammR[0] + \fee x_0)}
+                    = 
+                    \frac
+                        {\fee \ammR[1] x_0 (\ammR[0] + x_0 + \fee x_1) + \fee \ammR[0] \ammR[1] x_1}
+                        {(\ammR[0] + x_0 + \fee x_1) (\ammR[0] + \fee x_0)}
+                    \\
+                    & = 
+                    \frac
+                        {\fee \ammR[0] \ammR[1] x_0 + \fee \ammR[1] x_0^2 + \fee^2 \ammR[1] x_0 x_1 + \fee \ammR[0] \ammR[1] x_1} 
+                        {(\ammR[0] + x_0 + \fee x_1) (\ammR[0] + \fee x_0)}
+                    = 
+                    \frac
+                        {\fee \ammR[1] (\ammR[0] x_0 + x_0^2 + \fee x_0 x_1 + \ammR[0] x_1)} 
+                        {(\ammR[0] + x_0 + \fee x_1) (\ammR[0] + \fee x_0)}
+                \\
+                \\
+                    (z-1)
+                    & = \frac
+                        {(x_0 + x_1)(\ammR[0] + \fee x_0)(\ammR[0] + x_0 + \fee x_1)}
+                        {(\ammR[0] + \fee x_0 + \fee x_1)(x_0^2 + \ammR[0] x_0 +\fee x_0 x_1 + \ammR[0] x_1)} - 1
+                    \\
+                    & = \frac
+                        {(\ammR[0] x_0 + \fee x_0 ^ 2 + \ammR[0] x_1 + \fee x_0 x_1)(\ammR[0] + x_0 + \fee x_1)}
+                        {(\ammR[0] + \fee x_0 + \fee x_1)(x_0^2 + \ammR[0] x_0 +\fee x_0 x_1 + \ammR[0] x_1)}
+                    \\
+                    & -
+                        \frac
+                        {(\ammR[0] + \fee x_0 + \fee x_1 )(\ammR[0] x_0 + x_0 ^ 2 + \ammR[0] x_1 + \fee x_0 x_1)}
+                        {(\ammR[0] + \fee x_0 + \fee x_1)(x_0^2 + \ammR[0] x_0 +\fee x_0 x_1 + \ammR[0] x_1)}
+                    \\
+                    & = - \frac
+                        {\ammR[0] x_0 x_1 (\fee - 1)}
+                        {(\ammR[0] + \fee x_0 + \fee x_1)(x_0^2 + \ammR[0] x_0 +\fee x_0 x_1 + \ammR[0] x_1)}
+                \\
+                \\
+                    x_1 \valSXb & + (z - 1)(\valSXa x_0 + \valSXb x_1)
+                    \\
+                    & = \frac
+                            {\fee \ammR[0] \ammR[1] x_1}
+                            {(\ammR[0] + x_0 + \fee x_1) (\ammR[0] + \fee x_0)} 
+                            - \frac
+                            {\ammR[0] \ammR[1] x_0 x_1 (\fee - 1) \fee}
+                            {(\ammR[0] + \fee x_0 + \fee x_1) (\ammR[0] + \fee x_0) ( \ammR[0] + x_0 + \fee x_1)}
+                    \\
+                    & = 
+                        \frac
+                            {\fee \ammR[0] \ammR[1] x_1 (\ammR[0] + \fee x_0 + \fee x_1) - \ammR[0] \ammR[1] x_0 x_1 (\fee - 1) \fee}
+                            {(\ammR[0] + \fee x_0 + \fee x_1) (\ammR[0] + \fee x_0) ( \ammR[0] + x_0 + \fee x_1)}
+                    \\
+                    & = 
+                        \frac
+                            {\fee \ammR[0] \ammR[1] x_1 ((\ammR[0] + \fee x_0 + \fee x_1) - x_0 (\fee - 1))}
+                            {(\ammR[0] + \fee x_0 + \fee x_1) (\ammR[0] + \fee x_0) ( \ammR[0] + x_0 + \fee x_1)}
+                    \\
+                    & = 
+                        \frac
+                            {\fee \ammR[0] \ammR[1] x_1 (\ammR[0] + x_0 + \fee x_1)}
+                            {(\ammR[0] + \fee x_0 + \fee x_1) (\ammR[0] + \fee x_0) ( \ammR[0] + x_0 + \fee x_1)}
+                    \\
+                    & = 
+                        \frac
+                            {\fee \ammR[0] \ammR[1] x_1}
+                            {(\ammR[0] + \fee x_0 + \fee x_1) (\ammR[0] + \fee x_0)}
+                    \numberthis 
+                    \label{eq:x1z}
+                \\
+                \\
+                    \X[{\confGi}]{\tokT[0], \tokT[1]}
+                    & = \lim_{z \rightarrow 0} \SX{z,\ammR[0] + x_0,\ammR[1] -\valSXa x_0}
+                    \\
+                    & = \frac
+                        {\fee (\ammR[1] - \valSXa x_0)}
+                        {\ammR[0] + x_0}
+                      = \frac
+                        {\fee \Big (\frac
+                                {\ammR[1] (\ammR[0] + \fee x_0) - \fee \ammR[1] x_0}
+                                {\ammR[0] + \fee x_0}
+                            \Big )}
+                        {\ammR[0] + x_0}
+                      = \frac
+                            {\fee \ammR[0] \ammR[1]}
+                            {(\ammR[0] + \fee x_0) (\ammR[0] + x_0)}
+                \end{align*}
+
+                With these values in mind, we can continue the proof: 
+                \begin{align*}
+                    & \gain[{\confGi}]{\pmvA}{\txT(x_1)} + \epsilon_{\fee} < 0
+                    \\
+                    & \iff
+                    x_1 (\valSXb \exchO{\tokT[1]} - \exchO{\tokT[0]}) + \exchO{\tokT[1]}(z - 1) (\valSXa x_0 + \valSXb x_1) < 0
+                    \\
+                    & \iff 
+                    x_1 \valSXb \exchO{\tokT[1]} - x_1 \exchO{\tokT[0]} + \exchO{\tokT[1]}(z - 1) (\valSXa x_0 + \valSXb x_1) < 0
+                    \\
+                    & \iff 
+                    \exchO{\tokT[1]} (x_1 \valSXb + (z - 1) (\valSXa x_0 + \valSXb x_1)) < x_1 \exchO{\tokT[0]}
+                    \\ 
+                    & \iff
+                    \frac
+                        {x_1 \valSXb + (z - 1) (\valSXa x_0 + \valSXb x_1)}
+                        {x_1}
+                    < \frac{\exchO{\tokT[0]}}{\exchO{\tokT[1]}}
+                    && \text{by } x_1 > 0 \land \exchO{\tokT[1]} > 0
+                    \\ 
+                    & \iff
+                    \frac
+                        {x_1 \valSXb + (z - 1) (\valSXa x_0 + \valSXb x_1)}
+                        {x_1}
+                    < \X[\confGi]{\tokT[0], \tokT[1]}
+                    \\
+                    & \iff 
+                    \frac
+                        {\frac
+                            {\fee \ammR[0] \ammR[1] x_1}
+                            {(\ammR[0] + \fee x_0 + \fee x_1) (\ammR[0] + \fee x_0)}}
+                        {x_1}
+                    < \X[\confGi]{\tokT[0], \tokT[1]}
+                    \\
+                    & \iff 
+                    \frac
+                        {\fee \ammR[0] \ammR[1]}
+                        {(\ammR[0] + \fee x_0 + \fee x_1) (\ammR[0] + \fee x_0)}
+                    < \frac
+                            {\fee \ammR[0] \ammR[1]}
+                            {(\ammR[0] + \fee x_0) (\ammR[0] + x_0)}
+                    \\
+                    & \iff
+                    \frac
+                        {\fee \ammR[0] \ammR[1] (\ammR[0] + x_0) - \fee \ammR[0] \ammR[1] (\ammR[0] + \fee x_0 + \fee x_1)}
+                        {(\ammR[0] + \fee x_0 + \fee x_1) (\ammR[0] + \fee x_0) (\ammR[0] + x_0)} < 0
+                    \\
+                    & \iff
+                        \fee \ammR[0] \ammR[1] (\ammR[0] + x_0) - \fee \ammR[0] \ammR[1] (\ammR[0] + \fee x_0 + \fee x_1) < 0  && \text{by Den. } > 0
+                    \\
+                    & \iff
+                        \fee \ammR[0] \ammR[1] (\ammR[0] + x_0 - \ammR[0] - \fee x_0 - \fee x_1) < 0
+                    \\
+                    & \iff
+                        x_0 - \fee x_0 - \fee x_1 < 0    && \text{by } \fee \ammR[0] \ammR[1] < 0
+                    \\
+                    & \iff
+                        \fee (x_0 + x_1) - x_0 > 0
+                    \\
+                    & \iff
+                        \fee > \frac{x_0}{x_0 + x_1}
+                    \\
+                    & \iff
+                    x_1 > \frac{x_0(1 - \fee)}{\fee}
+                \end{align*}
+
+                So, this is only true when: 
+                \begin{align*}
+                    & \iff
+                    x_1 > \frac{x_0(1 - \fee)}{\fee}
+                    \\
+                    & \iff
+                    x - x_0 > \frac{x_0(1 - \fee)}{\fee}
+                    \\
+                    & \iff
+                    x > \frac{x_0(1 - \fee) + \fee x_0}{\fee}
+                    \\
+                    & \iff
+                    x > \frac{x_0}{\fee}
+                \end{align*}
+            \end{proof}
+    \end{itemize}
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:fee:max-gain} 
+
+    Let $x_1 > 0$ be such that $x_{max} = x_0 + x_1$. Then, as we stated in the proof of Theorem ~\ref{lem:fee:equil-vs-gain}, by Lemma ~\ref{lem:fee:swap-gain:additive} we know that: 
+
+        \[
+        \gain[\confG]{\pmvA}{\txT(x_{max})} 
+        \; = \;
+        \gain[\confG]{\pmvA}{\txT(x_0)} + \gain[{\confGi}]{\pmvA}{\txT(x_1)} + \epsilon_{\fee}
+        \]
+    We have proven in Theorem ~\ref{lem:fee:equil-vs-gain} that for $x < \frac{x_0}{\fee}$, $\gain[{\confGi}]{\pmvA}{\txT(x_1)} + \epsilon_{\fee} > 0$. Since $x_0$ is fixed, we want to find the maximum of the function: 
+    \begin{equation}
+        f(x_1) = \gain[\confG]{\pmvA}{\txT(x_0)} + \gain[{\confGi}]{\pmvA}{\txT(x_1)} + \epsilon_{\fee}
+    \end{equation}
+
+    To find the maximum, first we look at the function values at the extremes of its domain: 
+
+    \begin{align*}
+        \lim_{x_1 \rightarrow 0} f(x_1) & = 
+        \lim_{x_1 \rightarrow 0} \gain[\confG]{\pmvA}{\txT(x_0)} + \gain[{\confGi}]{\pmvA}{\txT(x_1)} + \epsilon_{\fee}
+        \\
+        & = \lim_{x_1 \rightarrow 0} \gain[\confG]{\pmvA}{\txT(x_0)} +
+        x_1 \valSXb \exchO{\tokT[1]} - x_1 \exchO{\tokT[0]} + \exchO{\tokT[1]} (z - 1)(\valSXa x_0 + \valSXb x_1)
+        \\
+        & = \lim_{x_1 \rightarrow 0} \gain[\confG]{\pmvA}{\txT(x_0)}
+        - x_1 \exchO{\tokT[0]} + \exchO{\tokT[1]} ((z-1)(\valSXa x_0 + \valSXb x_1) + \valSXb x_1)
+        \\
+        & = \lim_{x_1 \rightarrow 0} \gain[\confG]{\pmvA}{\txT(x_0)}
+            - x_1 \exchO{\tokT[0]} + 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x_1}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1)}
+        && (\text{By~\ref{eq:x1z}})
+        \\
+        & = \gain[\confG]{\pmvA}{\txT(x_0)} - 0 + \frac{0}{(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0)}
+        \\
+        & = \gain[\confG]{\pmvA}{\txT(x_0)}
+        \\
+        \phantom{space} \\
+        \lim_{x_1 \rightarrow \infty} f(x_1) & = 
+        \lim_{x_1 \rightarrow \infty} \gain[\confG]{\pmvA}{\txT(x_0)} + \gain[{\confGi}]{\pmvA}{\txT(x_1)} + \epsilon_{\fee}
+        \\
+        & = \lim_{x_1 \rightarrow \infty} \gain[\confG]{\pmvA}{\txT(x_0)}
+            - x_1 \exchO{\tokT[0]} + 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x_1}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1)}
+        \\
+        & = \lim_{x_1 \rightarrow \infty} \gain[\confG]{\pmvA}{\txT(x_0)}
+        - x_1 \exchO{\tokT[0]} + 
+        \frac
+                {x_1 \exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+                {x_1 (\ammR[0] + \fee x_0) (\frac{\ammR[0]}{x_1} + \frac{\fee x_0}{x_1} + \fee)}
+        \\
+        & = \gain[\confG]{\pmvA}{\txT(x_0)}
+            - \infty \exchO{\tokT[0]} + 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+                {(\ammR[0] + \fee x_0) (\frac{\ammR[0]}{x_1} + \frac{\fee x_0}{x_1} + \fee)}
+        \\ 
+        & = - \infty
+    \end{align*}
+
+    Now, we have to study the critical points of the function. To do that, we first have to compute the first derivative of $f(x_1)$:
+    \begin{align*}
+        f'(x_1) = &  \Big [
+             - x_1 \exchO{\tokT[0]} + 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x_1}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1)}
+                \Big ]'
+        \\
+        = &  -\exchO{\tokT[0]} + \Big [ 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x_1}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1)}
+                \Big ]'
+        \\
+        = &  -\exchO{\tokT[0]} +
+            \frac
+                {[\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x_1]' (\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1)}
+                {((\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1))^2}
+                \\
+            & -  \frac
+                {(\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x_1)[(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1)]'}
+                {((\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1))^2}
+        \\
+        = &  -\exchO{\tokT[0]} +
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] (\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1)}
+                {((\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1))^2}
+                \\
+            & -  \frac
+                {(\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x_1) \fee (\ammR[0] + \fee x_0)}
+                {((\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1))^2}
+        \\
+        = &  -\exchO{\tokT[0]} +
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] \Big ( (\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1) - \fee x_1 (\ammR[0] + \fee x_0) \Big )}
+                {(\ammR[0] + \fee x_0)^2 (\ammR[0] + \fee x_0 + \fee x_1)^2}
+        \\
+        = &  -\exchO{\tokT[0]} +
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] (\ammR[0] + \fee x_0) \Big ( \ammR[0] + \fee x_0 + \fee x_1 - \fee x_1 \Big )}
+                {(\ammR[0] + \fee x_0)^2 (\ammR[0] + \fee x_0 + \fee x_1)^2}
+        \\
+        = &  -\exchO{\tokT[0]} +
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] (\ammR[0] + \fee x_0) ( \ammR[0] + \fee x_0)}
+                {(\ammR[0] + \fee x_0)^2 (\ammR[0] + \fee x_0 + \fee x_1)^2}
+        \\
+        = &  -\exchO{\tokT[0]} +
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+                {(\ammR[0] + \fee x_0 + \fee x_1)^2}
+    \end{align*}
+
+    Now, we want to prove that 
+    \begin{equation}
+        x' =
+        \frac
+            {-\sqrt{\exchO{\tokT[0]}} \ammR[0] - \sqrt{\exchO{\tokT[0]}} \fee x_0 + \sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}}
+            {\sqrt{\exchO{\tokT[0]}} \fee}
+    \end{equation}
+    is a critical point of $f(x_1)$, i.e. $f'(x') = 0$. 
+    First, let's rewrite: 
+    \begin{align*}
+        \fee x' = & 
+        \fee \cdot \frac
+            {-\sqrt{\exchO{\tokT[0]}} \ammR[0] - \sqrt{\exchO{\tokT[0]}} \fee x_0 + \sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}}
+            {\sqrt{\exchO{\tokT[0]}} \fee}
+        \\
+        = & 
+        \frac
+            {-\sqrt{\exchO{\tokT[0]}} \ammR[0] - \sqrt{\exchO{\tokT[0]}} \fee x_0 + \sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}}
+            {\sqrt{\exchO{\tokT[0]}}}
+        \\
+        = & 
+        \frac
+            {-\sqrt{\exchO{\tokT[0]}} (\ammR[0] + \fee x_0)}
+            {\sqrt{\exchO{\tokT[0]}}} + 
+        \frac
+            {\sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}}
+            {\sqrt{\exchO{\tokT[0]}}}
+        \\
+        = & 
+        - (\ammR[0] + \fee x_0)
+            + 
+        \frac
+            {\sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}}
+            {\sqrt{\exchO{\tokT[0]}}} \numberthis \label{eq:feex'}
+    \end{align*}
+
+    Finally, 
+
+    \begin{align*}
+        f'(x') = & 
+        -\exchO{\tokT[0]} +
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+                {(\ammR[0] + \fee x_0 + \fee x')^2}
+        \\
+        = & 
+        -\exchO{\tokT[0]} +
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+                {(\ammR[0] + \fee x_0 - (\ammR[0] + \fee x_0)
+                    + 
+                    \frac
+                    {\sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}}
+                    {\sqrt{\exchO{\tokT[0]}}})^2}
+        \\
+        = & 
+        -\exchO{\tokT[0]} +
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+                {(\frac
+                    {\sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}}
+                    {\sqrt{\exchO{\tokT[0]}}})^2}
+        \\
+        = & 
+        -\exchO{\tokT[0]} +
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+                {\frac
+                    {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+                    {\exchO{\tokT[0]}}}
+        \\
+        = & 
+        -\exchO{\tokT[0]} + \exchO{\tokT[0]} = 0
+    \end{align*}
+
+    Now, since we know that this is either a local maximum or a local minimum, we only have to study the sign of the second derivative of $f(x_1)$ to determine which is the case. Let's compute it first: 
+
+    \begin{align*}
+        f''(x_1) & = \Big [  -\exchO{\tokT[0]} +
+                \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+                {(\ammR[0] + \fee x_0 + \fee x_1)^2}
+            \Big ]'
+        \\
+        & = \Big [\frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+                {(\ammR[0] + \fee x_0 + \fee x_1)^2}  \Big ]'
+        \\ 
+        & = \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] \cdot
+            \Big [(\ammR[0] + \fee x_0 + \fee x_1)^{-2}  \Big ]'
+        \\ 
+        & = \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] \cdot (-2) * (\ammR[0] + \fee x_0 + \fee x_1)^{-3} * [(\ammR[0] + \fee x_0 + \fee x_1)]'
+        \\ 
+        & = \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] \cdot (-2) * (\ammR[0] + \fee x_0 + \fee x_1)^{-3} * \fee
+        \\ 
+        & = -2 \exchO{\tokT[1]} \fee^2 \ammR[0] \ammR[1] * (\ammR[0] + \fee x_0 + \fee x_1)^{-3}
+    \end{align*}
+    Since $x_1 > 0$ and all the other constant are also strictly positive, then it is easy to see that this second derivative is always negative for $x_1 > 0$, hence in the function's domain, the function is concave. This is enough to prove that $x'$ is a global maximum over the functions domain \cite{wiki:concave_function}
+
+    Unfortunately, due to the limitation of the Lean 4 implementation of the model, it is not possible to conduct the proof this way in the theorem prover. Therefore, we present also the proof outlined in the implementation.
+
+    Again, consider the function
+    \begin{align*}
+        f(x_1) & = \gain[\confG]{\pmvA}{\txT(x_0)} + \gain[{\confGi}]{\pmvA}{\txT(x_1)} + \epsilon_{\fee}
+        \\
+        & = \gain[\confG]{\pmvA}{\txT(x_0)} + x_1 \valSXb \exchO{\tokT[1]} - x_1 \exchO{\tokT[0]} + \exchO{\tokT[1]} (z - 1)(\valSXa x_0 + \valSXb x_1)
+        \\ 
+        & = \gain[\confG]{\pmvA}{\txT(x_0)} - x_1 \exchO{\tokT[0]} + \exchO{\tokT[1]} ((z-1)(\valSXa x_0 + \valSXb x_1) + \valSXb x_1)
+        \\
+        & = \gain[\confG]{\pmvA}{\txT(x_0)}
+         - x_1 \exchO{\tokT[0]} + 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x_1}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x_1)}
+        && (\text{By~\ref{eq:x1z}})
+    \end{align*}
+
+    We want to prove that 
+
+    \begin{equation}
+        \label{eq:partial-xmax}
+        x' =
+        \frac
+            {-\sqrt{\exchO{\tokT[0]}} \ammR[0] - \sqrt{\exchO{\tokT[0]}} \fee x_0 + \sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}}
+            {\sqrt{\exchO{\tokT[0]}} \fee}
+    \end{equation}
+
+    Is the global maximum of $f(x_1)$, \ie 
+
+    \[
+        \forall x \neq x', f(x') > f(x)
+    \]
+
+    First, let's rewrite the inequality: 
+    \begin{align*}
+        & 
+        f(x') > f(x) 
+        \\ \iff  &
+        \gain[\confG]{\pmvA}{\txT(x_0)}
+         - x' \exchO{\tokT[0]} + 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x'}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x')} >
+        \\ & 
+        \gain[\confG]{\pmvA}{\txT(x_0)}
+         - x \exchO{\tokT[0]} + 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x)}
+        \\ \iff &
+         - x' \exchO{\tokT[0]} + 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x'}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x')} >
+        \\ &
+         - x \exchO{\tokT[0]} + 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x)}
+        \\ \iff & 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x'}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x')}
+            - x' \exchO{\tokT[0]}
+            - \Big ( 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x)}
+            - x \exchO{\tokT[0]}
+            \Big ) > 0
+    \end{align*}
+
+    Now let $A = \ammR[0] + \fee x_0$. Then, the inequality becomes
+
+    \begin{align*}
+            & 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x'}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x')}
+            - x' \exchO{\tokT[0]}
+            - \Big ( 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x}
+                {(\ammR[0] + \fee x_0) (\ammR[0] + \fee x_0 + \fee x)}
+            - x \exchO{\tokT[0]}
+            \Big ) > 0
+            \\ \iff & 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x'}
+                {A (A + \fee x')}
+            - x' \exchO{\tokT[0]}
+            - \Big ( 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x}
+                {A (A + \fee x)}
+            - x \exchO{\tokT[0]}
+            \Big ) > 0
+            \\ \iff & 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x' 
+                - x' \exchO{\tokT[0]} A (A + \fee x')}
+                {A (A + \fee x')}
+            - \Big ( 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x
+                - x \exchO{\tokT[0]} A (A + \fee x)}
+                {A (A + \fee x)}
+            \Big ) > 0
+    \end{align*}
+
+    We define the terms 
+    $D(x) = A (A + \fee x)$ and $N(x) = \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x - \exchO{\tokT[0]} x A (A + \fee x)$ to simplify the expression above: 
+    \begin{align*}
+        & 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x' 
+                - x' \exchO{\tokT[0]} A (A + \fee x')}
+                {A (A + \fee x')}
+            - \Big ( 
+            \frac
+                {\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x
+                - x \exchO{\tokT[0]} A (A + \fee x)}
+                {A (A + \fee x)}
+            \Big ) > 0
+        \\ \iff & 
+        \frac{N(x')}{D(x')} - \frac{N(x)}{D(x)} > 0
+        \\ \iff & 
+        N(x')D(x) - N(x)D(x') > 0
+        \\ \iff & 
+        \Big (\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x' 
+                - x' \exchO{\tokT[0]} A (A + \fee x') \Big )(A (A + \fee x)) 
+        \\  & - 
+        \Big ( \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x 
+                - x \exchO{\tokT[0]} A (A + \fee x) \Big )(A (A + \fee x')) > 0
+        \\ \iff &
+        A \Big [ \Big (\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x' 
+                - x' \exchO{\tokT[0]} A (A + \fee x') \Big )(A + \fee x)
+        \\  & -
+        \Big ( \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x 
+                - x \exchO{\tokT[0]} A (A + \fee x) \Big )(A + \fee x') \Big ] > 0 \numberthis \label{eq:D}
+    \end{align*}
+
+    Let this term be 
+    \[
+    \Delta(x) = A \Delta^*(x)
+    \]
+
+    Now, observe that 
+    \begin{align*}
+        \Delta^*(x) & = 
+        \Big (\exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x' 
+                - x' \exchO{\tokT[0]} A (A + \fee x') \Big )(A + \fee x)
+        \\  & - 
+        \Big ( \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] x 
+                - x \exchO{\tokT[0]} A (A + \fee x) \Big )(A + \fee x')
+        \\ & = 
+        \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] \Big ( x' (A + \fee x) - x (A + \fee x') \Big )  
+        \\ & - 
+        \exchO{\tokT[0]} A \Big ( x' (A + \fee x')(A + \fee x) - x (A + \fee x)(A + \fee x') \Big )
+        \\ & = 
+        \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] \Big ( x' (A + \fee x) - x (A + \fee x') \Big )  
+        \\ & - 
+        \exchO{\tokT[0]} A (x' - x) (A + \fee x')(A + \fee x)
+        \\ & = 
+        \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] A(x' - x)  
+        \\ & - 
+        \exchO{\tokT[0]} A (x' - x) (A + \fee x')(A + \fee x)
+        \\ & = 
+        A (x' - x) \Big [ 
+        \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] - 
+        \exchO{\tokT[0]} (A + \fee x')(A + \fee x)
+        \Big ]
+    \end{align*}
+
+    Hence, 
+    \[
+        \Delta(x) = A^2 (x' - x) \Big [ 
+            \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] - 
+            \exchO{\tokT[0]} (A + \fee x')(A + \fee x)
+            \Big ]
+    \]
+
+    Now, recall the definition~\ref{eq:partial-xmax}. We can find a useful equality condition starting from this: 
+
+    \begin{align*}
+        & x' =
+        \frac
+            {-\sqrt{\exchO{\tokT[0]}} \ammR[0] - \sqrt{\exchO{\tokT[0]}} \fee x_0 + \sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}}
+            {\sqrt{\exchO{\tokT[0]}} \fee}
+        \\ \iff & 
+        \sqrt{\exchO{\tokT[0]}} \fee x' =
+            -\sqrt{\exchO{\tokT[0]}} (\ammR[0] + \fee x_0) + \sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+        \\ \iff & 
+        \sqrt{\exchO{\tokT[0]}} \fee x'  + \sqrt{\exchO{\tokT[0]}} A =
+         \sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+        \\ \iff & 
+        \sqrt{\exchO{\tokT[0]}} (A + \fee x') =
+         \sqrt{\exchO{\tokT[1]} \fee \ammR[0] \ammR[1]}
+        \\ \iff & 
+        \exchO{\tokT[0]} (A + \fee x')^2 =
+         \exchO{\tokT[1]} \fee \ammR[0] \ammR[1]
+    \end{align*}
+    
+    Now recall the definition of $\Delta(x)$. With the above equality we get: 
+
+    \begin{align*}
+        \Delta(x) & = A^2 (x' - x) \Big [ 
+            \exchO{\tokT[1]} \fee \ammR[0] \ammR[1] - 
+            \exchO{\tokT[0]} (A + \fee x')(A + \fee x)
+            \Big ]
+        \\ & = 
+        A^2 (x' - x) \Big [ 
+            \exchO{\tokT[0]} (A + \fee x')^2 - 
+            \exchO{\tokT[0]} (A + \fee x')(A + \fee x)
+            \Big ]
+        \\ & = 
+        A^2 (x' - x) \Big [ 
+            \exchO{\tokT[0]} (A + \fee x') ((A + \fee x') - (A + \fee x))
+            \Big ]
+        \\ & = 
+        A^2 (x' - x) \Big [ 
+            \exchO{\tokT[0]} (A + \fee x') \fee (x' - x)
+            \Big ]
+        \\ & = 
+        A^2 \exchO{\tokT[0]} (A + \fee x') \fee (x' - x)^2
+    \end{align*}
+
+    Finally, combining this with \eqref{eq:D} yields: 
+    \begin{align*}
+        & f(x') > f(x)
+        \\ \iff & 
+        \Delta(x) > 0
+        \\ \iff & 
+        A^2 \exchO{\tokT[0]} (A + \fee x') \fee (x' - x)^2 > 0
+        \\ \iff & 
+        (x' - x)^2 > 0
+        \\ \iff & 
+        x' - x \neq 0
+        \\ \iff & 
+        x' \neq x
+    \end{align*}
+
+    \marconote{Devo dimostrare che la x' è positiva? Forse si, per questo serve la fee minore di 1}
+    
+    Since $A > 0$, $\exchO{\tokT[0]} > 0$, $\fee > 0$, $x' > 0$ and $x' \neq x$ by hypothesis. 
+\end{proofof}
+
+\begin{proofof}{Lemma}{lem:arbitrage:optimal-unique}
+    
+\end{proofof}

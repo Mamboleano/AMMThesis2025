@@ -1,0 +1,73 @@
+\section{Properties of the costant-product swap function}
+In this section we study in depth the constant product swap rate (Def~\ref{defi:const-prod}). As previously stated, this is the swap rate function that is mostly used in real-world AMMs implementations (such as Uniswap v2 \cite{uniswapimpl}), hence it is of particular interest analyzing the properties satisfied by this function. 
+
+First of all, it is output-bounded, so AMMs that implement this function are guaranteed to have non-negative reserves upon any valid swap transaction. 
+
+\citeLean{AMMLib/FeeVersion/Constprod.html\#SX.fee.constprod.outputbound} % cite-lean(SX.fee.constprod.outputbound)
+\begin{lemma}{Constant product \emph{output-boundedness}}{fee:constprod:output-bound}
+    The constant product swap rate function (Def.~\ref{defi:const-prod}) is output bounded (Def.~\ref{defi:sr-output-bound})
+\end{lemma}
+Then, the constant product swap rate function is also strictly monotonic. This also ensures that the internal rate is strictly monotonic, which is another key result later needed for the arbitrage proofs.
+
+\citeLean{AMMLib/FeeVersion/Constprod.html\#SX.fee.constprod.strictmono} % cite-lean(SX.fee.constprod.strictmono)
+\begin{lemma}{Constant product \emph{strict-monotonicity}}{fee:constprod:strict-mono}
+    The constant product swap rate function (Def.~\ref{defi:const-prod}) is strictly monotonic (Def.~\ref{defi:sr-strict-mono})
+\end{lemma}
+
+Finally, we can also prove that the function is additive, based on the definition given above. 
+
+\citeLean{AMMLib/FeeVersion/Constprod.html\#SX.fee.constprod.extended_additivity} % cite-lean(SX.fee.constprod.extended_additivity)
+\begin{lemma}{Constant product \emph{additivity}}{fee:constprod:additivity}
+The constant product swap rate function (Def.~\ref{defi:const-prod}) is additive (Def.~\ref{defi:fee:sr-additivity})
+\end{lemma}
+
+At first sight, the reader might think that the gain given by $x$ tokens on an AMM that uses the constant product swap rate function is the same as the sum of the gains of two consecutive swaps, where the sum of the swapped tokens is equal to $x$. However, we just proved that the constant product satisfies the definition of additivity given in Def.~\ref{defi:fee:sr-additivity}. So, if the trading fee $\fee$ is less than one, and the user performing the swap has no minted token, then it also means that the function satisfies all the assumption of Lemma~\ref{lem:fee:swap-gain:additive}. 
+
+\marconote{aggiungere esempio per mostrare che la constprod fee non è additiva rispetto alla definizione originale}
+
+Next, we present some lemmas that put in relation the swap rate, the internal and the external rate all together. This is of particular interest since it allows us to reason over the gain of the user, combining these results with Lemma~\ref{lem:fee:swap:gain-SX-X-fee}.
+
+First, we analyze the relationship between the swap rate and the internal rate. 
+
+\citeLean{AMMLib/FeeVersion/Constprod.html\#SX.fee.constprod.sx_rate_vs_int_rate} % cite-lean(SX.fee.constprod.sx_rate_vs_int_rate)
+\begin{lemma}{Swap rate vs Internal rate}{fee:sx-rate-vs-int-rate}  
+  Let $\confG = \walA{\tokBal[\pmvA]} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$, $x \in \mathbb{R}>0$, 
+  and $\confG \xrightarrow{\actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}} \confGi$. 
+  %
+  Then, if $\SX{}$ is the constant product swap rate (Def.~\ref{defi:const-prod}) and $\fee \leq 1$: 
+  \begin{equation}
+    \X[\confGi]{\tokT[0],\tokT[1]} < \SX{x, \ammR[0], \ammR[1]} < \X[\Gamma]{\tokT[0],\tokT[1]}
+    \qquad
+  \end{equation}
+\end{lemma}
+So we can see how the swap rate sits right between the internal rates computed in the AMM state before and after performing the swap transaction. It is also worth noting how this lemma is valid also when $\fee = 1$, which means that it would be valid also in the model presented in \cite{BCL22lmcs}.
+
+Finally, we also want to analyze how the internal and external swap rate relate to each others. In particular, we consider a valid swap transaction and suppose that after this transaction, the external swap rate and the internal one are equal. This is a key assumption that we will use thoroughly when reasoning about the arbitrage later on.  
+\albnote{Dato che $\txT(x) = \pmvA : \textit{swap}(x, \tokT[0], \tokT[1])$ viene usato in diversi posti, forse conviene introdurlo come notazione generale, invece che re-definirlo in ogni teorema che lo usa. Potrebbe aiutare a snellire un po' gli enunciati dei teoremi come nel'esempio di sopra.}
+
+\marconote{Anche secondo me una definizione generale andrebbe meglio. Inoltre questa T(x) rappresenta solo le swap valide che può fare A}
+
+\citeLean{AMMLib/FeeVersion/Constprod.html\#SX.fee.constprod.additive_int_rate_vs_ext_rate} % cite-lean(SX.fee.constprod.additive_int_rate_vs_ext_rate)
+\begin{lemma}{Split Internal rate vs External rate}{fee:split-int-vs-ext-rate}
+    Let $\confG = \walA{\tokBal[\pmvA]} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$.
+  For all $x \in \mathbb{R}>0$, 
+  let $\txT(x) = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$.
+  Let $x_0$ be such that:
+  \begin{equation}
+    \label{eq:arbitrage:max:x0}
+    % \SX{0,\ammR[0]+x_0,\ammR[1]-x_0 \cdot \SX{x_0,\ammR[0],\ammR[1]}}
+    \X[\confGi]{\tokT[0],\tokT[1]} = \X{\tokT[0],\tokT[1]}
+    \qquad
+    \text{ where }
+    \confG \xrightarrow{\txT(x_0)} \confGi
+  \end{equation}
+  Let $x_1, \; x_2 \in \mathbb{R}>0$ be such that $x_0 = x_1 + x_2$. Then, if $\SX{}$ is the constant product swap rate (~\ref{defi:const-prod}) and $\fee < 1$: 
+  \begin{equation}
+    \X{\tokT[0],\tokT[1]} < \X[\Gamma_2]{\tokT[0],\tokT[1]}
+    \qquad
+    \text{ where }
+    \confG \xrightarrow{\txT(x_1)} \Gamma_1 \xrightarrow{\txT(x_2)} \Gamma_2
+  \end{equation}
+\end{lemma}
+
+So in other terms, if we split the $x_0$ that brings the internal swap rate equal to the external one, and perform the two swaps, then the internal rate will be strictly greater than the external one. This is a result that we expected, since we already proved in Lemma~\ref{lem:fee:constprod:additivity} that splitting a swap transaction in two different swaps brings the AMM into a different state as well. 

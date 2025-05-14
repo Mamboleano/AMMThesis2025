@@ -1,0 +1,23 @@
+\chapter{Economic properties of AMMs with trading fees}
+
+In this chapter we study the economic properties of Automated Market Makers (AMMs) that apply a trading fee on swap transactions. Our goal is to analyze how trading fees play a role on the incentives of users and the behavior and properties of swap functions, with keen focus on the constant product swap rate function (~\ref{defi:const-prod}).
+
+All the results of this paper are formalized in Lean 4 and are based on an extension of the model introduced by Bartoletti et al. in \cite{BCL22lmcs}, and the formalization in Lean 4 introduced by Pusceddu et al. in \cite{PB24arxiv}.
+
+To help the reader understand better the importance of each lemma and result, we introduce the economic intuition behind the results, their formal statement, and - when appropriate - an illustrative example. 
+
+\bartnote{conviene organizzare il capitolo in sezioni: provo con delle sezioni un po' arbitrarie, ma poi si possono migliorare}
+
+
+\input{Chapters/02_Economical_Properties/01_Gain_swap}
+
+\newpage
+
+\input{Chapters/02_Economical_Properties/02_General_Swap_Properties}
+
+
+\input{Chapters/02_Economical_Properties/03_Constprod_Properties}
+
+\newpage
+
+\input{Chapters/02_Economical_Properties/04_Arbitrage}

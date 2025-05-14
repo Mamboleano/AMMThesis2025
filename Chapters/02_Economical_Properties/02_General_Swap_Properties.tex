@@ -1,0 +1,130 @@
+
+\section{General properties of the swap function}
+
+In the previous section, we defined properties regarding the gain of a user from a swap transaction. In this section we define some key properties regarding swap functions and what they imply on the AMMs. 
+
+Output boundedness guarantees that an AMM has always enough output tokens 
+$\tokT[1]$ to send to the user who performs a  
+$\actAmmSwapExact{}{}{x}{\tokT[0]}{\tokT[1]}$.
+
+\citeLean{AMMLib/Transaction/Swap/Rate.html\#SX.outputbound} % cite-lean(SX.outputbound)
+\begin{defi}{Output-boundedness}{sr-output-bound}
+  A swap rate function $\SX{}$ is \emph{output-bounded} when, for all $x,\ammR[0],\ammR[1]$ such that $x \geq 0$ and $\ammR[0], \ammR[1] > 0$:
+  \[
+  x \cdot \SX{x,\ammR[0],\ammR[1]} < \ammR[1]
+  \]
+\end{defi}
+
+In other terms, this ensures that for any $\SX{}$ that satisfies this definition, the reserves of an already existing AMM will never be drained. 
+
+Monotonicity relates the parameters of the swap rate function with its output. In particular, the output decreases if we decrease the amount of swapped tokens $x$, if we decrease the reserves of $\tokT[0]$ or if we increase the reserves of $\tokT[1]$. 
+
+\citeLean{AMMLib/Transaction/Swap/Rate.html\#SX.strictmono} % cite-lean(SX.strictmono)
+\begin{defi}{Strict monotonicity}{sr-strict-mono}
+  A swap rate function $\SX{}$ is \emph{strictly monotonic} when,
+  for $i \in \setenum{0,1,2}$ and $\lhd_i \in \setenum{<,\leq}$:
+  \[
+    x' \lhd_0 x,\; \ammRi[0] \lhd_1 \ammR[0],\; \ammR[1] \lhd_2 \ammRi[1]
+    \implies
+    \SX{x,\ammR[0],\ammR[1]}
+    \lhd_3
+    \SX{x',\ammRi[0],\ammRi[1]}
+  \]
+  where:
+  \[
+    \lhd_3 = \begin{cases}
+      \leq & \text{if $\lhd_i = \,\leq$ for $i \in \setenum{0,1,2}$} \\
+      < & \text{otherwise}
+    \end{cases}
+  \]
+\end{defi}
+
+This means that, for example, given a fixed input amount $x$ and a fixed reserve of $\tokT[0]$ $r_0$, a lower amount of reserves of $\tokT[1]$ $r_1$ will result in a higher swap rate output. This will be crucial on proving some of the lemmas presented further in the paper. 
+
+The next crucial definition we want to introduce is the one of additivity, i.e. what is the output of two combined swaps. However, before doing so, we have to introduce a few auxiliary terms, since our definition of additivity slightly differs from the one introduced in \cite{BCL22lmcs}. The definition below for example, denotes the factor from which our definition of additivity differs from the original one.  
+
+\marconote{aggiungere proof su questo e sui lemmi di zeta sotto}
+
+\citeLean{AMMLib/FeeVersion/Additivity.html\#SX.fee.z_extended} % cite-lean(SX.fee.z_extended)
+\begin{defi}{$\Zfee$}{fee:additive:zeta}
+We define the function 
+
+    \begin{align*}
+        \Z x y {r_0} {r_1} = 
+            \frac
+            {\Big ( (\fee \ammR[1] x)(\ammR[0] + \fee x + \fee y) + (\fee \ammR[1] \ammR[0] y)\Big ) \cdot (\ammR[0] + x + \fee y)}
+            {(\ammR[0] + \fee x + \fee y) \cdot \Big ( (\fee \ammR[1] x)(\ammR[0] + x + \fee y) + (\fee \ammR[1] \ammR[0] y)\Big )}
+    \end{align*}
+
+where $x, y, r_0, r_1 \in \mathbb{R}>0$
+\end{defi}
+
+Since this factor can be a bit too complex to work with, especially in some proofs, we introduce an equivalent factor in the lemma below, which is slightly easier to work with in some cases. 
+
+\citeLean{AMMLib/FeeVersion/Additivity.html\#SX.fee.z_eq_z_extended} % cite-lean(SX.fee.z_eq_z_extended)
+\begin{lemma}{$\Zfee$ reduced form}{fee:additive:zeta-reduced}
+    $\forall \; x, y, r_0, r_1 \in \mathbb{R}>0$,
+
+    \begin{align*}
+        \Z x y {r_0} {r_1} =
+            \frac
+            {(x + y)(\ammR[0] + \fee x)(\ammR[0] + x + \fee y)}
+            {(\ammR[0] + \fee x + \fee y)(x^2 + \ammR[0] x +\fee x y + \ammR[0] y)} 
+    \end{align*}
+\end{lemma}
+
+It is also worth noting how this form is evidently less complex, as it does not depend at all on $r_1$. Next, it can be interesting to understand which values this term can assume, if it is always positive, negative or so on. The lemma below shows that this term not only always positive, but also always greater than one.
+
+\marconote{magari conviene spostare questo più sotto dove è più facile spiegare perché serve? Così però non si vede che l'additività è "più grande"}
+
+\citeLean{AMMLib/FeeVersion/Additivity.html\#SX.fee.z_factor_gt_1} % cite-lean(SX.fee.z_factor_gt_1)
+\begin{lemma}{$\Zfee$ > 1}{fee:additive:zeta-gt-one}
+     $\forall \; x, y, r_0, r_1 \in \mathbb{R}>0, \; \fee < 1 \implies \Z x y {r_0} {r_1} > 1$
+\end{lemma}
+
+Now we have everything to give our definition of additivity. 
+
+\citeLean{AMMLib/FeeVersion/Additivity.html\#SX.fee.extended_additivity} % cite-lean(SX.fee.extended_additivity)
+\begin{defi}{Additivity}{fee:sr-additivity}
+  If a swap rate function $\SX{}$ is \emph{output-bounded} then it is also \emph{additive} when:  
+
+ \[
+    \SX{x+y,\ammR[0],\ammR[1]} = 
+    \frac{\valSXa x + \valSXb y}{x+y} \cdot \Z x y {r_0} {r_1}
+ \]
+  where 
+  \[
+    \valSXa = \SX{x,\ammR[0],\ammR[1]},\;
+    \valSXb = \SX{y,\ammR[0]+x,\ammR[1]-\valSXa x}
+  \]
+  % \bartnote{this does not seem part of a definition. Either change the definition into a theorem, or keep the definition and add a theorem. The first option is preferable if you do not use the term ``additive'' many times} 
+  % \marconote{Fatto nel teorema ~\ref{lem:fee:additive:zeta-gt-one}, più simile a come ho formalizzato il tutto in Lean}
+\end{defi}
+
+Note how the term $\Z x y {r_0} {r_1}$ multiplies the fraction, which is exactly the definition of additivity provided in \cite{BCL22lmcs}. Since we know from Lemma~\ref{lem:fee:additive:zeta-gt-one} that this factor is always greater than one, this means that in a model that uses fees and with a swap rate function that satisfies this definition, a user is more likely to  swap larger sums of tokens rather than splitting this amount into two. 
+
+The following lemma defines how additivity and gain are related to each other. In particular, the gain of two consecutive swap actions is given by the sum of the single gains plus a term $\epsilon_{\fee}$.
+\newpage
+
+\citeLean{AMMLib/FeeVersion/Additivity.html\#Swap.fee.additive_gain} % cite-lean(Swap.fee.additive_gain)
+\begin{lemma}{Additivity of swap gain}{fee:swap-gain:additive}
+  Let $\confG = \walA{\tokBal[\pmvA]} \mid \amm{\ammR[0]:\tokT[0]}{\ammR[1]:\tokT[1]} \mid \confD$. Let \mbox{$\txT(x) = \actAmmSwapExact{\pmvA}{}{x}{\tokT[0]}{\tokT[1]}$} denote the enabled transactions in $\confG$ for $x \in \mathbb{R}>0$
+  and let $\confGi$ be such that, $\confG \xrightarrow{\txT(x_0)} \confGi$.
+  
+  If $\SX{}$ is \emph{output-bounded} and \emph{additive}, $\tokBal[\pmvA]\tokM{\tokT[0]}{\tokT[1]} = 0$ and $\fee < 1$ then:
+  \[
+    \gain[\confG]{\pmvA}{\txT(x_0+x_1)} 
+    \; = \;
+    \gain[\confG]{\pmvA}{\txT(x_0)} + \gain[\confGi]{\pmvA}{\txT(x_1)} + \epsilon_{\fee}
+  \]
+  where:
+    \begin{align*}
+        \epsilon_{\fee} & = \exchO{\tokT[1]}(\Z{x_0}{x_1}{r_0}{r_1}-1)(\valSXa x_0 + \valSXb x_1)
+        \\
+        \valSXa & = \SX{x_0, \ammR[0], \ammR[1]}
+        \\
+        \valSXb & = \SX{x_1, \ammR[0] + x_0, \ammR[1] - \valSXa x_0}
+    \end{align*}
+\end{lemma}
+
+From the definition of $\epsilon_{\fee}$ it is also worth noting that this term is always positive under the lemma's assumptions, since all the terms are strictly positive and $\Z{x_0}{x_1}{r_0}{r_1} > 1$ from Lemma~\ref{lem:fee:additive:zeta-gt-one}. In the next section we will give a concrete example to show the reader this exact result using the constant product swap rate function.
